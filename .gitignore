@@ -1,3 +1,33 @@
+# Managed by Composer
+/app/bootstrap.php.cache
+/var/bootstrap.php.cache
+/bin/*
+!bin/console
+!bin/symfony_requirements
+
+# Managed by NPM
+/.DS_Store/
+/dist/
+/dist-ssr/
+/coverage/
+*.local
+
+# Assets and user uploads
+/web/bundles/
+/web/uploads/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+.idea/
+/docker/caddy/config/
+/docker/postgres/data/
 
 ###> symfony/framework-bundle ###
 /.env.local
@@ -8,3 +38,17 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+###> friendsofphp/php-cs-fixer ###
+/.php-cs-fixer.php
+/.php-cs-fixer.cache
+/.phpcs-cache
+###< friendsofphp/php-cs-fixer ###
+
+###> pentatrion/vite-bundle ###
+/node_modules/
+/public/build/
+###< pentatrion/vite-bundle ###
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###

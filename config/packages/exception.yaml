@@ -1,0 +1,20 @@
+framework:
+  exceptions:
+    Doctrine\DBAL\Exception\ForeignKeyConstraintViolationException:
+      log_level: 'debug'
+      status_code: 400
+    Symfony\Component\Serializer\Exception\NotEncodableValueException:
+      log_level: 'debug'
+      status_code: 400
+    Symfony\Component\Serializer\Exception\NotNormalizableValueException:
+      log_level: 'debug'
+      status_code: 400
+    App\Service\ResetPassword\Exception\InvalidResetPasswordRequestException:
+      log_level: 'debug'
+      status_code: 400
+    App\Service\ResetPassword\Exception\ExpiredResetPasswordTokenException:
+      log_level: 'debug'
+      status_code: 400
+    App\Service\ResetPassword\Exception\InvalidResetPasswordTokenException:
+      log_level: 'debug'
+      status_code: 400
