@@ -15,7 +15,7 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            '@': fileURLToPath(new URL('assets', import.meta.url)),
+            '@': fileURLToPath(new URL('src/UI/', import.meta.url)),
             '@public': fileURLToPath(new URL('public', import.meta.url)),
         },
     },
@@ -26,7 +26,7 @@ export default defineConfig({
         emptyOutDir: true,
         rollupOptions: {
             input: {
-                app: './assets/main.tsx',
+                app: './src/UI/main.tsx',
             },
         }
     },

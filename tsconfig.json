@@ -30,7 +30,7 @@
     "baseUrl": "./",
     "paths": {
       "@/*": [
-        "./assets/*"
+        "./src/UI/*"
       ],
       "@public/*": [
         "./public/"
@@ -38,7 +38,7 @@
     }
   },
   "include": [
-    "assets",
-    "vite.config.ts"
+    "./src/UI/*",
+    "./vite.config.ts"
   ]
 }

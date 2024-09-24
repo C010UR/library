@@ -31,7 +31,7 @@ class AuthController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        return new JsonResponse($user->toArray());
+        return new JsonResponse($user->toArray(true));
     }
 
     #[Route('/logout', name: 'logout', methods: ['GET'])]
@@ -50,7 +50,7 @@ class AuthController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        return new JsonResponse($user->toArray());
+        return new JsonResponse($user->toArray(true));
     }
 
     #[Route('/has-access', name: 'has_access', methods: ['GET'])]

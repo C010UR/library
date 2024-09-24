@@ -1,10 +1,10 @@
 framework:
-    messenger:
-        # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
-        # failure_transport: failed
+  messenger:
+    # Uncomment this (and the failed transport below) to send failed messages to this transport for later handling.
+    # failure_transport: failed
 
-        transports:
-            sqs-email: '%env(SQS_EMAIL_MESSENGER_TRANSPORT_DSN)%'
+    transports:
+      sqs-email: '%env(SQS_EMAIL_MESSENGER_TRANSPORT_DSN)%'
 
-        routing:
-            App\Message\EmailMessage: sqs-email
+    routing:
+      App\Message\EmailMessage: sqs-email
