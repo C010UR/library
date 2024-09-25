@@ -40,12 +40,16 @@ export class Theme {
   }
 
   private setDefaultTheme() {
-    const isDark: Boolean = window.matchMedia(
+    const isDark: boolean = window.matchMedia(
       '(prefers-color-scheme: dark)',
     ).matches;
 
     localStorage.setItem('dark-mode', isDark ? 'true' : 'false');
-    isDark ? this.enableDarkMode() : this.disableDarkMode();
+    if (isDark) {
+      this.enableDarkMode();
+    } else {
+      this.disableDarkMode();
+    }
 
     this.theme = isDark ? ThemeEnum.DARK : ThemeEnum.LIGHT;
   }

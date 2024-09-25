@@ -87,7 +87,7 @@ class PermissionRepository extends ServiceEntityRepository
 
                 return $query
                     ->andWhere('permission.name LIKE :name')
-                    ->setParameter('name', DoctrineHelper::transformToLikeExpression((string)$value));
+                    ->setParameter('name', DoctrineHelper::transformToLikeExpression((string) $value));
             },
             'description' => function (QueryBuilder $query, string $alias, mixed $value): QueryBuilder {
                 if (empty($value)) {
@@ -114,7 +114,7 @@ class PermissionRepository extends ServiceEntityRepository
             'permission',
             $params,
             $filters,
-            fn(Permission $permission) => $permission->toArray(true),
+            fn (Permission $permission) => $permission->toArray(true),
             $paginate,
         );
     }

@@ -1,15 +1,21 @@
-import LoginForm from '@/components/forms/login-form.tsx';
-import { getProfile } from '@/api/auth';
 import { redirect } from 'react-router-dom';
 
-export async function loginLoader() {
-  const user = await getProfile(false);
+import { getProfile } from '@/api/auth';
+import LoginForm from '@/components/forms/login-form';
 
-  if (user !== undefined && !user.error) {
-    return redirect('/');
+export async function loginLoader() {
+  try {
+    const user = await getProfile();
+
+    if (user !== undefined) {
+      return redirect('/');
+    }
+
+    return { user };
+  } catch (_) {
   }
 
-  return { user };
+  return { user: null };
 }
 
 export default function LoginPage() {

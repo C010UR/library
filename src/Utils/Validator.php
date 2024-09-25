@@ -10,7 +10,7 @@ class Validator
             throw new \InvalidArgumentException('Field must not be empty');
         }
 
-        return (string)$value;
+        return (string) $value;
     }
 
     public static function nullOrNotEmpty(mixed $value): mixed
@@ -37,7 +37,7 @@ class Validator
 
         $projectDir = dirname(__DIR__, 2);
 
-        if (!file_exists($projectDir . '/' . trim($value, '\\/'))) {
+        if (!file_exists($projectDir.'/'.trim((string) $value, '\\/'))) {
             throw new \InvalidArgumentException('File not found');
         }
 

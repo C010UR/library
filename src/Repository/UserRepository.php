@@ -19,7 +19,6 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 {
     use RepositoryHelper;
 
-
     public function __construct(
         ManagerRegistry $registry,
         PermissionRepository $permissionRepository,
@@ -115,17 +114,17 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
                 return $query
                     ->andWhere('LOWER(user.email) LIKE :email')
-                    ->setParameter('email', DoctrineHelper::transformToLikeExpression((string)$value));
+                    ->setParameter('email', DoctrineHelper::transformToLikeExpression((string) $value));
             },
             'is_active' => function (QueryBuilder $query, string $alias, mixed $value): QueryBuilder {
                 return $query
                     ->andWhere('LOWER(user.is_active) = :is_active')
-                    ->setParameter('is_active', (bool)$value);
+                    ->setParameter('is_active', (bool) $value);
             },
             'is_dropped' => function (QueryBuilder $query, string $alias, mixed $value): QueryBuilder {
                 return $query
                     ->andWhere('LOWER(user.is_dropped) = :is_dropped')
-                    ->setParameter('is_dropped', (bool)$value);
+                    ->setParameter('is_dropped', (bool) $value);
             },
             'search' => function (QueryBuilder $query, string $alias, mixed $value): QueryBuilder {
                 if (empty($value)) {
@@ -143,7 +142,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             'user',
             $params,
             $filters,
-            fn(User $user) => $user->toArray(true),
+            fn (User $user) => $user->toArray(true),
             $paginate,
         );
     }

@@ -35,14 +35,14 @@ class UserController extends AbstractController
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     #[IsGranted('SHOW_USERS')]
-    public function show(Request $request, User $user): JsonResponse
+    public function show(User $user): JsonResponse
     {
         return new JsonResponse($user->toArray(true));
     }
 
     #[Route('/slug/{slug}', name: 'show_by_slug', methods: ['GET'])]
     #[IsGranted('SHOW_USERS')]
-    public function showBySlug(Request $request, #[MapEntity(mapping: ['slug' => 'slug'])] User $user): JsonResponse
+    public function showBySlug(#[MapEntity(mapping: ['slug' => 'slug'])] User $user): JsonResponse
     {
         return new JsonResponse($user->toArray(true));
     }
@@ -75,7 +75,7 @@ class UserController extends AbstractController
 
     #[Route('/{id}/remove', name: 'remove', methods: ['POST'])]
     #[IsGranted('SHOW_USERS:UPDATE_USERS')]
-    public function remove(Request $request, User $user): JsonResponse
+    public function remove(User $user): JsonResponse
     {
         $this->userService->removeUser($user);
 
@@ -85,7 +85,6 @@ class UserController extends AbstractController
     #[Route('/{id}/permissions/{permissionId}/add', name: 'permission_add', methods: ['POST'])]
     #[IsGranted('SHOW_USERS:MANAGE_PERMISSIONS')]
     public function addPermission(
-        Request $request,
         User $user,
         #[MapEntity(mapping: ['permissionId' => 'id'])] Permission $permission,
     ): JsonResponse {
@@ -97,7 +96,6 @@ class UserController extends AbstractController
     #[Route('/{id}/permissions/{permissionId}/remove', name: 'permission_remove', methods: ['POST'])]
     #[IsGranted('SHOW_USERS:MANAGE_PERMISSIONS')]
     public function removePermission(
-        Request $request,
         User $user,
         #[MapEntity(mapping: ['permissionId' => 'id'])] Permission $permission,
     ): JsonResponse {
@@ -109,7 +107,6 @@ class UserController extends AbstractController
     #[Route('/{id}/permissions/clone/from/{fromId}', name: 'permission_clone', methods: ['POST'])]
     #[IsGranted('SHOW_USERS:MANAGE_PERMISSIONS')]
     public function clonePermissions(
-        Request $request,
         User $user,
         #[MapEntity(mapping: ['fromId' => 'id'])] User $from,
     ): JsonResponse {

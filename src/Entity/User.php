@@ -18,8 +18,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTransformableInterface, IdAccessInterface,
-                      \Stringable
+class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTransformableInterface, IdAccessInterface, \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -79,6 +78,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTr
         $this->permissions = new ArrayCollection();
     }
 
+    #[\Override]
     public function getId(): ?int
     {
         return $this->id;
@@ -104,7 +104,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTr
     #[\Override]
     public function getUserIdentifier(): string
     {
-        return (string)$this->email;
+        return (string) $this->email;
     }
 
     /**
@@ -316,10 +316,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTr
             return null;
         }
 
-        $fullName = $this->getFirstName() . ' ' . $this->getLastName();
+        $fullName = $this->getFirstName().' '.$this->getLastName();
 
         if ($this->getMiddleName()) {
-            $fullName .= ' ' . $this->getMiddleName();
+            $fullName .= ' '.$this->getMiddleName();
         }
 
         return $fullName;
@@ -344,7 +344,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTr
 
     public function computeSlug(SluggerInterface $slugger): static
     {
-        $this->slug = (string)$slugger->slug(sprintf('%s %s', $this->id, $this->getFullName()))->lower();
+        $this->slug = (string) $slugger->slug(sprintf('%s %s', $this->id, $this->getFullName()))->lower();
 
         return $this;
     }

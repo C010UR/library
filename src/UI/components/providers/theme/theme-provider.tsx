@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import ThemeContext from './theme-context';
+import ThemeContext from '@/components/providers/theme/theme-context';
 import { Theme } from '@/types/theme';
 
 type Props = {

@@ -32,7 +32,7 @@ export default defineConfig({
     },
     server: {
         watch: {
-            ignored: ['**/.idea/**', '**/tests/**', '**/var/**', '**/vendor/**'],
+            ignored: ['**/.idea/**', '**/tests/**', '**/docker/**', '**/var/**', '**/vendor/**', '**/migrations/**'],
         }
     },
 });

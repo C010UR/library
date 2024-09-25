@@ -20,6 +20,7 @@ class PermissionVoter extends Voter
         return explode(':', $attribute);
     }
 
+    #[\Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
         $attributes = $this->parseAttribute($attribute);
@@ -34,6 +35,7 @@ class PermissionVoter extends Voter
         return true;
     }
 
+    #[\Override]
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();

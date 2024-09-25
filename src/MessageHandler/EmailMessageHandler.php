@@ -61,19 +61,19 @@ class EmailMessageHandler
             }
 
             // Recreate the img tag with the modified src value
-            return '<img ' . $matches[1] . 'src=' . $matches[2] . $base64 . $matches[2] . $matches[4] . '>';
+            return '<img '.$matches[1].'src='.$matches[2].$base64.$matches[2].$matches[4].'>';
         }, $content);
     }
 
     private function getBase64image(string $path): ?string
     {
-        if (!file_exists($this->publicDir . $path)) {
+        if (!file_exists($this->publicDir.$path)) {
             return null;
         }
 
         $contentType = Utils::extensionToContentType(pathinfo($path, PATHINFO_EXTENSION) ?? '');
         $result = sprintf('data:%s;base64,', $contentType);
 
-        return $result . base64_encode(file_get_contents($this->publicDir . $path));
+        return $result.base64_encode(file_get_contents($this->publicDir.$path));
     }
 }

@@ -35,10 +35,10 @@
       "@public/*": [
         "./public/"
       ]
-    }
+    },
   },
   "include": [
-    "./src/UI/*",
-    "./vite.config.ts"
+    "src/UI/**/*",
+    "vite.config.ts"
   ]
 }

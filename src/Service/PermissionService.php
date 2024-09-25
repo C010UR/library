@@ -22,15 +22,14 @@ class PermissionService
     public function createPermission(array|Permission $permission): array|Permission
     {
         $pre = function (Permission &$permission): void {
-            if ($this->permissionRepository->findOneByName($permission->getName())) {
-                throw new BadRequestHttpException(
-                    sprintf('Permission with the name "%s" this name already exists', $permission->getName()),
-                );
+            if ($this->permissionRepository->findOneByName($permission->getName()) instanceof Permission) {
+                throw new BadRequestHttpException(sprintf('Permission with the name "%s" this name already exists', $permission->getName()));
             }
         };
 
         $process = function (array|Permission $permission): array|Permission {
             $this->permissionRepository->save($permission, true);
+
             return $permission;
         };
 
@@ -45,6 +44,7 @@ class PermissionService
     {
         $process = function (array|Permission $permission): array|Permission {
             $this->permissionRepository->save($permission, true);
+
             return $permission;
         };
 
@@ -58,6 +58,7 @@ class PermissionService
     {
         $process = function (array|Permission $permission): array|Permission {
             $this->permissionRepository->remove($permission, true);
+
             return $permission;
         };
 
@@ -71,12 +72,12 @@ class PermissionService
     {
         $permissions = is_string($permissions) ? [$permissions] : $permissions;
 
-        if (empty($permissions)) {
+        if ([] === $permissions) {
             return true;
         }
 
         $targetPermissions = $this->permissionRepository->findByUserAndNames($user, $permissions);
 
-        return $permissions === array_map(fn(Permission $permission) => $permission->getName(), $targetPermissions);
+        return $permissions === array_map(fn (Permission $permission) => $permission->getName(), $targetPermissions);
     }
 }

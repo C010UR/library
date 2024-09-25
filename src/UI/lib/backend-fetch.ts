@@ -1,4 +1,6 @@
-import axios, { AxiosError, isAxiosError } from 'axios';
+import { QueryClient } from '@tanstack/react-query';
+import axios, { isAxiosError } from 'axios';
+
 import { OneOrMany, Scalar } from '@/types/types';
 
 export const API_URL = import.meta.env.BACKEND_URL ?? 'http://localhost';
@@ -11,8 +13,8 @@ interface ParamsOptions {
         [key: string]: OneOrMany<Scalar>;
       }
     | undefined;
-  pageSize?: Number | undefined;
-  page?: Number | undefined;
+  pageSize?: number | undefined;
+  page?: number | undefined;
   order?: 'ASC' | 'DESC' | undefined;
 }
 
@@ -20,13 +22,16 @@ export interface FetchOption<T> extends ParamsOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
   data?: T;
   withFiles?: boolean;
-  isThrow?: boolean;
 }
 
-export interface FetchError {
-  error: true;
-  message: string;
-  status: number;
+export class FetchError extends Error {
+  status?: number;
+
+  constructor(message?: string, status?: number) {
+    super(message);
+    this.status = status;
+    this.name = 'FetchError';
+  }
 }
 
 function parseParams({
@@ -47,7 +52,7 @@ function parseParams({
     };
 
     for (const paramKey in params) {
-      let param = params[paramKey];
+      const param = params[paramKey];
 
       if (Array.isArray(param)) {
         urlSearchParams.append(paramKey, param.map(mapParam).join(','));
@@ -82,11 +87,10 @@ export async function backendFetch<ReturnType, InputType>(
     pageSize = undefined,
     page = undefined,
     order = undefined,
-    isThrow = true,
   }: FetchOption<InputType> = {},
-): Promise<ReturnType | FetchError> {
-  const _fetch = async () => {
-    const result = await axios({
+): Promise<ReturnType> {
+  try {
+    return axios({
       method: method,
       baseURL: API_URL + '/api/v' + API_VERSION,
       url: endpoint,
@@ -96,29 +100,25 @@ export async function backendFetch<ReturnType, InputType>(
       responseType: withFiles ? 'formdata' : 'json',
       timeout: 60000, // 1 minute
     });
-
-    return result.data;
-  };
-
-  if (isThrow) {
-    return await _fetch();
-  } else {
-    try {
-      return await _fetch();
-    } catch (error: AxiosError | unknown) {
-      if (isAxiosError(error) && error.response) {
-        return {
-          error: true,
-          message: error.response.data.message,
-          status: Number(error.response.status),
-        };
-      } else {
-        return {
-          error: true,
-          message: String(error),
-          status: 500,
-        };
-      }
+  } catch (error: Error | unknown) {
+    if (isAxiosError(error) && error.response) {
+      throw new FetchError(
+        error.response.data?.message ??
+          'There was an issue processing your request',
+        error.response.data.status ?? error.response.status ?? 500,
+      );
+    } else if (error instanceof Error) {
+      throw new FetchError(error.message, 500);
+    } else {
+      throw new FetchError(String(error), 500);
     }
   }
 }
+
+export const backendQueryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 120000, // 2min
+    },
+  },
+});

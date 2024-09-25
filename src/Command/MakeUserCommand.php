@@ -4,7 +4,6 @@ namespace App\Command;
 
 use App\Entity\User;
 use App\Repository\PermissionRepository;
-use App\Service\PermissionService;
 use App\Service\UserService;
 use App\Utils\Validator;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -89,6 +88,7 @@ class MakeUserCommand extends Command
         $io = new SymfonyStyle($input, $output);
 
         $io->comment('Creating the user...');
+
         $user = new User();
 
         $user
@@ -99,8 +99,8 @@ class MakeUserCommand extends Command
 
         if ($input->getArgument('image')) {
             $uploadedFile = new UploadedFile(
-                $this->projectDir . '/' . trim((string)$input->getArgument('image'), '\\/'),
-                basename((string)$input->getArgument('image')),
+                $this->projectDir.'/'.trim((string) $input->getArgument('image'), '\\/'),
+                basename((string) $input->getArgument('image')),
             );
 
             $user->setImage($uploadedFile);

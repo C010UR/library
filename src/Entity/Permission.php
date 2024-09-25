@@ -36,6 +36,7 @@ class Permission implements ArrayTransformableInterface, IdAccessInterface
         $this->users = new ArrayCollection();
     }
 
+    #[\Override]
     public function getId(): ?int
     {
         return $this->id;
@@ -85,7 +86,6 @@ class Permission implements ArrayTransformableInterface, IdAccessInterface
             'name' => $this->getName(),
             'description' => $this->getDescription(),
         ];
-
 
         if ($deep) {
             $result['users'] = [];

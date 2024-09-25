@@ -12,6 +12,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class ErrorNormalizer implements NormalizerInterface
 {
+    #[\Override]
     public function normalize(
         mixed $object,
         ?string $format = null,
@@ -41,15 +42,17 @@ class ErrorNormalizer implements NormalizerInterface
         };
     }
 
+    #[\Override]
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
         return $data instanceof FlattenException;
     }
 
+    #[\Override]
     public function getSupportedTypes(?string $format): array
     {
         return [
-            FlattenException::class => __CLASS__ === self::class,
+            FlattenException::class => self::class === self::class,
         ];
     }
 }

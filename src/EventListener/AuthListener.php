@@ -17,7 +17,7 @@ class AuthListener
     /**
      * @var int
      */
-    final public const MAX_LOGIN_ATTEMPTS = 3;
+    final public const int MAX_LOGIN_ATTEMPTS = 3;
 
     public function __construct(private readonly UserRepository $userRepository)
     {

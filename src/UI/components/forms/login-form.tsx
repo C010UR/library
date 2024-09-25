@@ -1,15 +1,10 @@
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input, PasswordInput } from '@/components/ui/input';
+import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
+import { z } from 'zod';
+
+import { useLogin } from '@/components/hooks/use-auth';
+import { AnimatedButton } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -19,9 +14,17 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
-import { useLogin } from '@/components/hooks/use-auth';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Input, PasswordInput } from '@/components/ui/input';
+
+
 
 const formSchema = z.object({
   username: z.string().email(),
@@ -64,11 +67,11 @@ export default function LoginForm() {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
+                      required
+                      autoComplete="username"
                       disabled={mutation.isPending}
                       placeholder="user@example.com"
-                      required
                       type="email"
-                      autoComplete="username"
                       {...field}
                     />
                   </FormControl>
@@ -84,9 +87,9 @@ export default function LoginForm() {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <PasswordInput
-                      disabled={mutation.isPending}
                       required
                       autoComplete="current-password"
+                      disabled={mutation.isPending}
                       {...field}
                     />
                   </FormControl>
@@ -102,8 +105,8 @@ export default function LoginForm() {
                   <FormControl>
                     <Checkbox
                       checked={field.value}
-                      onCheckedChange={field.onChange}
                       disabled={mutation.isPending}
+                      onCheckedChange={field.onChange}
                     />
                   </FormControl>
                   <FormLabel className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
@@ -114,17 +117,17 @@ export default function LoginForm() {
             />
           </CardContent>
           <CardFooter className="flex flex-col">
-            <Button
+            <AnimatedButton
               className="w-full"
-              type="submit"
               disabled={mutation.isPending}
+              type="submit"
             >
               {mutation.isPending ? 'Logging in...' : 'Login'}
-            </Button>
+            </AnimatedButton>
             <p className="mt-2 text-xs text-center text-muted-foreground">
               <Link
-                to="/auth/forgot-password"
                 className="underline hover:text-primary"
+                to="/auth/forgot-password"
               >
                 Forgot password?
               </Link>

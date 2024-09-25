@@ -9,7 +9,6 @@ use App\Service\ResetPassword\Class\ResetPasswordToken;
 use App\Service\ResetPassword\Exception\ExpiredResetPasswordTokenException;
 use App\Service\ResetPassword\Exception\InvalidResetPasswordTokenException;
 use App\Service\ResetPassword\Exception\TooManyPasswordRequestsException;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class ResetPasswordHelper
 {

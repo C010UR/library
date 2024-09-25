@@ -1,15 +1,20 @@
 import { redirect, useLoaderData } from 'react-router-dom';
-import { User } from '@/types/types';
+
 import { getProfile } from '@/api/auth';
+import { User } from '@/types/types';
 
 export async function profileLoader() {
-  const user = await getProfile(false);
+  try {
+    const user = await getProfile();
 
-  if (user === undefined || user.error) {
-    return redirect('/auth/login');
-  }
+    if (user !== undefined) {
+      return redirect('/');
+    }
 
-  return { user };
+    return { user };
+  } catch (_) {}
+
+  return { user: null };
 }
 
 export default function RootPage() {

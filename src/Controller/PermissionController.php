@@ -17,9 +17,8 @@ class PermissionController extends AbstractController
 {
     public function __construct(
         private readonly PermissionRepository $permissionRepository,
-//        private readonly PermissionService $permissionService,
-    )
-    {
+        //        private readonly PermissionService $permissionService,
+    ) {
     }
 
     #[Route('/list', name: 'list', methods: ['GET'])]
@@ -33,44 +32,44 @@ class PermissionController extends AbstractController
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     #[IsGranted('SHOW_PERMISSIONS')]
-    public function show(Request $request, Permission $permission): JsonResponse
+    public function show(Permission $permission): JsonResponse
     {
         return new JsonResponse($permission->toArray(true));
     }
 
-//    CAN ONLY MODIFY FROM THE CODE
-//    #[Route('/create', name: 'create', methods: ['POST'])]
-//    #[IsGranted('SHOW_PERMISSIONS:UPDATE_PERMISSIONS')]
-//    public function create(Request $request): JsonResponse
-//    {
-//        $permission = new Permission();
-//
-//        $form = $this->createForm(PermissionType::class, $permission);
-//        FormHelper::submit($request, $form, true);
-//
-//        $this->permissionService->createPermission($permission);
-//
-//        return new JsonResponse($permission->toArray(true));
-//    }
-//
-//    #[Route('/{id}/update', name: 'update', methods: ['POST'])]
-//    #[IsGranted('SHOW_PERMISSIONS:UPDATE_PERMISSIONS')]
-//    public function update(Request $request, Permission $permission): JsonResponse
-//    {
-//        $form = $this->createForm(PermissionType::class, $permission);
-//        FormHelper::submit($request, $form, false);
-//
-//        $this->permissionService->updatePermission($permission);
-//
-//        return new JsonResponse($permission->toArray(true));
-//    }
-//
-//    #[Route('/{id}/remove', name: 'remove', methods: ['POST'])]
-//    #[IsGranted('SHOW_PERMISSIONS:UPDATE_PERMISSIONS')]
-//    public function register(Request $request, Permission $permission): JsonResponse
-//    {
-//        $this->permissionService->removePermission($permission);
-//
-//        return new JsonResponse();
-//    }
+    //    CAN ONLY MODIFY FROM THE CODE
+    //    #[Route('/create', name: 'create', methods: ['POST'])]
+    //    #[IsGranted('SHOW_PERMISSIONS:UPDATE_PERMISSIONS')]
+    //    public function create(Request $request): JsonResponse
+    //    {
+    //        $permission = new Permission();
+    //
+    //        $form = $this->createForm(PermissionType::class, $permission);
+    //        FormHelper::submit($request, $form, true);
+    //
+    //        $this->permissionService->createPermission($permission);
+    //
+    //        return new JsonResponse($permission->toArray(true));
+    //    }
+    //
+    //    #[Route('/{id}/update', name: 'update', methods: ['POST'])]
+    //    #[IsGranted('SHOW_PERMISSIONS:UPDATE_PERMISSIONS')]
+    //    public function update(Request $request, Permission $permission): JsonResponse
+    //    {
+    //        $form = $this->createForm(PermissionType::class, $permission);
+    //        FormHelper::submit($request, $form, false);
+    //
+    //        $this->permissionService->updatePermission($permission);
+    //
+    //        return new JsonResponse($permission->toArray(true));
+    //    }
+    //
+    //    #[Route('/{id}/remove', name: 'remove', methods: ['POST'])]
+    //    #[IsGranted('SHOW_PERMISSIONS:UPDATE_PERMISSIONS')]
+    //    public function register(Request $request, Permission $permission): JsonResponse
+    //    {
+    //        $this->permissionService->removePermission($permission);
+    //
+    //        return new JsonResponse();
+    //    }
 }

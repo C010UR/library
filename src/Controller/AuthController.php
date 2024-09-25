@@ -64,14 +64,14 @@ class AuthController extends AbstractController
         $user = $this->getUser();
         $permissions = trim($request->query->get('permissions', ''));
 
-        if (empty($permissions)) {
+        if ('' === $permissions) {
             return new JsonResponse(true);
-        } else {
-            $permissions = array_map(
-                fn(string $permission) => trim($permission),
-                explode(',', $request->query->get('permissions', '')),
-            );
         }
+
+        $permissions = array_map(
+            fn (string $permission) => trim($permission),
+            explode(',', $request->query->get('permissions', '')),
+        );
 
         return new JsonResponse($user && $this->permissionService->userHasAccess($user, $permissions));
     }

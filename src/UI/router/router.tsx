@@ -1,17 +1,18 @@
 import { createBrowserRouter } from 'react-router-dom';
-import ErrorPage from '@/pages/error/error-page.tsx';
-import LoginPage, { loginLoader } from '@/pages/auth/login-page.tsx';
-import ForgotPasswordPage from "@/pages/auth/forgot-password-page.tsx";
-import ResetPasswordPage from "@/pages/auth/reset-password-page.tsx";
-import AuthPage from "@/pages/auth/auth-page.tsx";
-import RootPage, { profileLoader } from "@/pages/root-page.tsx";
+
+import AuthPage from '@/pages/auth/auth-page';
+import ForgotPasswordPage from '@/pages/auth/forgot-password-page';
+import LoginPage, { loginLoader } from '@/pages/auth/login-page';
+import ResetPasswordPage from '@/pages/auth/reset-password-page';
+import ErrorPage from '@/pages/error/error-page';
+import RootPage, { profileLoader } from '@/pages/root-page';
 
 export default createBrowserRouter([
   {
     path: '/',
     element: <RootPage />,
     errorElement: <ErrorPage />,
-    loader: profileLoader
+    loader: profileLoader,
   },
   {
     path: '/auth',
@@ -31,7 +32,7 @@ export default createBrowserRouter([
       {
         path: '/auth/reset-password/:token',
         element: <ResetPasswordPage />,
-      }
-    ]
+      },
+    ],
   },
 ]);

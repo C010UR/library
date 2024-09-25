@@ -7,7 +7,6 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\ResetPassword\ResetPasswordService;
 use App\Utils\Helper\ServiceHelper;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -25,10 +24,8 @@ class UserService
     public function createUser(array|User $user): array|User
     {
         $pre = function (User &$user): void {
-            if ($this->userRepository->findOneByEmail($user->getEmail())) {
-                throw new BadRequestHttpException(
-                    sprintf('User with the email "%s" already exists', $user->getEmail()),
-                );
+            if ($this->userRepository->findOneByEmail($user->getEmail()) instanceof User) {
+                throw new BadRequestHttpException(sprintf('User with the email "%s" already exists', $user->getEmail()));
             }
 
             $user->normalizeName();
@@ -36,8 +33,9 @@ class UserService
             $user->setPassword('');
         };
 
-        $process = function (array|User $user): array|user {
+        $process = function (array|User $user): array|User {
             $this->userRepository->save($user, true);
+
             return $user;
         };
 
@@ -64,8 +62,9 @@ class UserService
             $user->computeSlug($this->slugger);
         };
 
-        $process = function (array|User $user): array|user {
+        $process = function (array|User $user): array|User {
             $this->userRepository->save($user, true);
+
             return $user;
         };
 
@@ -78,8 +77,9 @@ class UserService
 
     public function removeUser(array|User $user): void
     {
-        $process = function (array|User $user): array|user {
+        $process = function (array|User $user): array|User {
             $this->userRepository->remove($user, true);
+
             return $user;
         };
 

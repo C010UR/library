@@ -15,16 +15,18 @@ use Doctrine\ORM\Query\TokenType;
 class PostgreSQLFullTextSearch extends FunctionNode implements TypedExpression
 {
     public array $values;
+
     public ArithmeticExpression $keyword;
 
+    #[\Override]
     public function getSql(SqlWalker $sqlWalker): string
     {
-        if (count($this->values) === 1) {
+        if (1 === count($this->values)) {
             $tsVector = $sqlWalker->walkArithmeticExpression(reset($this->values));
         } else {
             $tsVector = sprintf(
                 'CONCAT(%s)',
-                implode(', \' \', ', array_map(fn($value) => $sqlWalker->walkArithmeticExpression($value), $this->values)),
+                implode(", ' ', ", array_map(fn ($value) => $sqlWalker->walkArithmeticExpression($value), $this->values)),
             );
         }
 
@@ -37,6 +39,7 @@ class PostgreSQLFullTextSearch extends FunctionNode implements TypedExpression
         );
     }
 
+    #[\Override]
     public function parse(Parser $parser): void
     {
         $parser->match(TokenType::T_IDENTIFIER);
@@ -44,7 +47,7 @@ class PostgreSQLFullTextSearch extends FunctionNode implements TypedExpression
 
         $values = [$parser->ArithmeticExpression()];
 
-        while ($parser->getLexer()->lookahead?->type === TokenType::T_COMMA) {
+        while (TokenType::T_COMMA === $parser->getLexer()->lookahead?->type) {
             $parser->match(TokenType::T_COMMA);
             $values[] = $parser->ArithmeticExpression();
         }
@@ -59,6 +62,7 @@ class PostgreSQLFullTextSearch extends FunctionNode implements TypedExpression
         $parser->match(TokenType::T_CLOSE_PARENTHESIS);
     }
 
+    #[\Override]
     public function getReturnType(): Type
     {
         return Type::getType(Types::BOOLEAN);

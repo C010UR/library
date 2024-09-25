@@ -1,6 +1,18 @@
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
+import { z } from 'zod';
+
+import { useRequestPasswordReset } from '@/components/hooks/use-auth';
+import {AnimatedButton} from '@/components/ui/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import {
   Form,
   FormControl,
@@ -10,17 +22,6 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
-import { useRequestPasswordReset } from '@/components/hooks/use-auth.tsx';
 import { HOST_URL } from '@/lib/backend-fetch';
 
 const formSchema = z.object({
@@ -63,11 +64,11 @@ export default function ForgotPasswordForm() {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
+                      required
+                      autoComplete="username"
                       disabled={mutation.isPending}
                       placeholder="user@example.com"
-                      required
                       type="email"
-                      autoComplete="username"
                       {...field}
                     />
                   </FormControl>
@@ -77,16 +78,16 @@ export default function ForgotPasswordForm() {
             />
           </CardContent>
           <CardFooter className="flex flex-col">
-            <Button
+            <AnimatedButton
               className="w-full"
-              type="submit"
               disabled={mutation.isPending}
+              type="submit"
             >
               {mutation.isPending ? 'Sending...' : 'Send the Reset Link'}
-            </Button>
+            </AnimatedButton>
             <p className="mt-2 text-xs text-center text-muted-foreground">
               Remember your password?{' '}
-              <Link to="/auth/login" className="underline hover:text-primary">
+              <Link className="underline hover:text-primary" to="/auth/login">
                 Back to login
               </Link>
             </p>

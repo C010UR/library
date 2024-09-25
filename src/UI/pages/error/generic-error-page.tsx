@@ -1,7 +1,8 @@
 import { AlertCircle } from 'lucide-react';
-import { Button } from '../../components/ui/button';
 import { Link } from 'react-router-dom';
-import ThemeToggle from '../../components/ui/theme-toggle.tsx';
+
+import { Button } from '@/components/ui/button';
+import ThemeToggle from '@/components/ui/theme-toggle';
 
 export default function GenericError({
   errorMessage,

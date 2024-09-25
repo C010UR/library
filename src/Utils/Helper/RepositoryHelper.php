@@ -9,6 +9,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 trait RepositoryHelper
 {
     public const int PAGE_SIZE = 20;
+
     public const int DEFAULT_PAGE = 1;
 
     private function filterByParams(
@@ -30,16 +31,17 @@ trait RepositoryHelper
 
         if ($paginate) {
             if (isset($params['page_size']) && filter_var($params['page_size'], FILTER_VALIDATE_INT)) {
-                $pageSize = (int)$params['page_size'];
+                $pageSize = (int) $params['page_size'];
             } else {
                 $pageSize = self::PAGE_SIZE;
             }
 
             if (isset($params['page']) && filter_var($params['page_size'], FILTER_VALIDATE_INT)) {
-                $page = (int)$params['page'];
+                $page = (int) $params['page'];
             } else {
                 $page = self::DEFAULT_PAGE;
             }
+
             $query
                 ->setMaxResults($pageSize)
                 ->setFirstResult(($page - 1) * $pageSize);
@@ -60,11 +62,7 @@ trait RepositoryHelper
             'result' => [],
         ];
 
-        if ($paginate) {
-            $data = new Paginator($query->getQuery());
-        } else {
-            $data = $query->getQuery()->getResult();
-        }
+        $data = $paginate ? new Paginator($query->getQuery()) : $query->getQuery()->getResult();
 
         foreach ($data as $row) {
             assert(array_key_exists(IdAccessInterface::class, class_implements($row)));

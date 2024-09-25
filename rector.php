@@ -2,9 +2,10 @@
 
 declare(strict_types=1);
 
+use Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector;
 use Rector\Config\RectorConfig;
-use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
 use Rector\Doctrine\Set\DoctrineSetList;
+use Rector\Php74\Rector\Closure\ClosureToArrowFunctionRector;
 use Rector\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector;
 use Rector\Set\ValueObject\LevelSetList;
 use Rector\Set\ValueObject\SetList;
@@ -13,19 +14,24 @@ use Rector\Symfony\Set\TwigSetList;
 
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([
-        __DIR__ . '/config',
-        __DIR__ . '/migrations',
-        __DIR__ . '/public',
-        __DIR__ . '/src',
-        __DIR__ . '/templates',
+        __DIR__.'/config',
+        __DIR__.'/migrations',
+        __DIR__.'/public',
+        __DIR__.'/src',
+        __DIR__.'/templates',
     ]);
 
     $rectorConfig->skip([
-//        RemoveAlwaysTrueIfConditionRector::class,
+        //        RemoveAlwaysTrueIfConditionRector::class,
         ClassPropertyAssignToConstructorPromotionRector::class,
+        //        ExplicitBoolCompareRector::class,
+        ClosureToArrowFunctionRector::class,
     ]);
 
-    $rectorConfig->symfonyContainerPhp(__DIR__ . '/tests/symfony-container.php');
+    $rectorConfig->symfonyContainerPhp(__DIR__.'/tests/symfony-container.php');
+
+    $rectorConfig->importShortClasses(true);
+    $rectorConfig->removeUnusedImports(true);
 
     // define sets of rules
     $rectorConfig->sets([

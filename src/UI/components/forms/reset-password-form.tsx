@@ -1,15 +1,9 @@
-import { z } from 'zod';
-import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-    Form,
-    FormControl, FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
-} from '@/components/ui/form';
-import {  PasswordInput } from '@/components/ui/input';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import { usePasswordReset } from '@/components/hooks/use-auth';
+import { AnimatedButton } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -17,10 +11,16 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import {
-  usePasswordReset,
-} from '@/components/hooks/use-auth.tsx';
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { PasswordInput } from '@/components/ui/input';
 
 const formSchema = z
   .object({
@@ -72,11 +72,11 @@ export default function ForgotPasswordForm({ token }: { token: string }) {
                   <FormLabel>New Password</FormLabel>
                   <FormControl>
                     <PasswordInput
+                      required
+                      autoComplete="username"
                       disabled={mutation.isPending}
                       placeholder="user@example.com"
-                      required
                       type="email"
-                      autoComplete="username"
                       {...field}
                     />
                   </FormControl>
@@ -89,36 +89,36 @@ export default function ForgotPasswordForm({ token }: { token: string }) {
               )}
             />
           </CardContent>
-            <CardContent className="grid gap-4">
-                <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                        <FormItem className="grid gap-2 space-y-0">
-                            <FormLabel>Confirm New Password</FormLabel>
-                            <FormControl>
-                                <PasswordInput
-                                    disabled={mutation.isPending}
-                                    placeholder="user@example.com"
-                                    required
-                                    type="email"
-                                    autoComplete="username"
-                                    {...field}
-                                />
-                            </FormControl>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-            </CardContent>
+          <CardContent className="grid gap-4">
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem className="grid gap-2 space-y-0">
+                  <FormLabel>Confirm New Password</FormLabel>
+                  <FormControl>
+                    <PasswordInput
+                      required
+                      autoComplete="username"
+                      disabled={mutation.isPending}
+                      placeholder="user@example.com"
+                      type="email"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </CardContent>
           <CardFooter className="flex flex-col">
-            <Button
+            <AnimatedButton
               className="w-full"
-              type="submit"
               disabled={mutation.isPending}
+              type="submit"
             >
               {mutation.isPending ? 'Sending...' : 'Send Password'}
-            </Button>
+            </AnimatedButton>
           </CardFooter>
         </form>
       </Form>
