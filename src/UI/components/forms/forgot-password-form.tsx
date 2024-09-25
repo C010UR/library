@@ -6,10 +6,10 @@ import { z } from 'zod';
 import { useRequestPasswordReset } from '@/components/hooks/use-auth';
 import { AnimatedButton } from '@/components/ui/button';
 import {
-  Card,
   CardContent,
   CardDescription,
   CardFooter,
+  CardForm,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -23,7 +23,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { HOST_URL } from '@/lib/backend-fetch';
-import { emailSchema, stringSchema } from '@/types/zod-schemas.ts';
+import { emailSchema, stringSchema } from '@/types/zod-schemas';
 
 const formSchema = z.object({
   email: emailSchema(),
@@ -35,7 +35,7 @@ export default function ForgotPasswordForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: '',
-      hook: HOST_URL + 'auth/reset-password',
+      hook: HOST_URL + '/auth/reset-password',
     },
   });
 
@@ -46,7 +46,7 @@ export default function ForgotPasswordForm() {
   }
 
   return (
-    <Card className="w-[350px] md:w-[500px]">
+    <CardForm>
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl">Forgot Password</CardTitle>
         <CardDescription>
@@ -96,6 +96,6 @@ export default function ForgotPasswordForm() {
           </CardFooter>
         </form>
       </Form>
-    </Card>
+    </CardForm>
   );
 }

@@ -13,7 +13,7 @@ export const passwordSchema = (min: number = 8, max: number = 255) =>
     .refine((password) => /[0-9]/.test(password), {
       message: formErrorMessages.password.number,
     })
-    .refine((password) => /[!@#$%^&*]/.test(password), {
+    .refine((password) => /[!@#$%^&*\[\]:()\-=_+{}?><,./\\|]/.test(password), {
       message: formErrorMessages.password.special,
     });
 

@@ -13,9 +13,9 @@ export async function profileLoader() {
     }
 
     return { user };
-  } catch (_) {}
-
-  return { user: null };
+  } catch (_) {
+    return redirect('/auth/login');
+  }
 }
 
 export default function RootPage() {

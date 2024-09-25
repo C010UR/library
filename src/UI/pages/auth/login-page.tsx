@@ -12,8 +12,7 @@ export async function loginLoader() {
     }
 
     return { user };
-  } catch (_) {
-  }
+  } catch (_) {}
 
   return { user: null };
 }

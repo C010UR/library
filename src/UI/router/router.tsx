@@ -6,6 +6,8 @@ import LoginPage, { loginLoader } from '@/pages/auth/login-page';
 import ResetPasswordPage from '@/pages/auth/reset-password-page';
 import ErrorPage from '@/pages/error/error-page';
 import RootPage, { profileLoader } from '@/pages/root-page';
+import ForgotPasswordConfirmationPage from "@/pages/auth/forgot-password-confirmation-page.tsx";
+import ResetPasswordConfirmationPage from "@/pages/auth/reset-password-confirmation-page.tsx";
 
 export default createBrowserRouter([
   {
@@ -30,8 +32,16 @@ export default createBrowserRouter([
         element: <ForgotPasswordPage />,
       },
       {
+        path: '/auth/forgot-password-confirm',
+        element: <ForgotPasswordConfirmationPage />,
+      },
+      {
         path: '/auth/reset-password/:token',
         element: <ResetPasswordPage />,
+      },
+      {
+        path: '/auth/reset-password-confirm',
+        element: <ResetPasswordConfirmationPage />,
       },
     ],
   },

@@ -1,14 +1,14 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { z } from 'zod';
 
 import { usePasswordReset } from '@/components/hooks/use-auth';
 import { AnimatedButton } from '@/components/ui/button';
 import {
-  Card,
   CardContent,
   CardFooter,
+  CardForm,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -44,18 +44,13 @@ export default function ForgotPasswordForm({ token }: { token: string }) {
   });
 
   const mutation = usePasswordReset({ token });
-  const navigate = useNavigate();
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     mutation.mutate({ password: values.password });
   }
 
-  if (mutation.isSuccess) {
-    navigate('/auth/login');
-  }
-
   return (
-    <Card className="w-[350px] md:w-[500px]">
+    <CardForm>
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl">Reset Password</CardTitle>
       </CardHeader>
@@ -111,7 +106,7 @@ export default function ForgotPasswordForm({ token }: { token: string }) {
               disabled={mutation.isPending}
               type="submit"
             >
-              {mutation.isPending ? 'Sending...' : 'Send Password'}
+              {mutation.isPending ? 'Sending...' : 'Reset Password'}
             </AnimatedButton>
             <p className="mt-2 text-xs text-center text-muted-foreground">
               Don't want to change the password?{' '}
@@ -122,6 +117,6 @@ export default function ForgotPasswordForm({ token }: { token: string }) {
           </CardFooter>
         </form>
       </Form>
-    </Card>
+    </CardForm>
   );
 }

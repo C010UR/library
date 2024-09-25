@@ -60,7 +60,6 @@ const AnimatedButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <motion.div
         className="w-full"
-        whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
         <Button

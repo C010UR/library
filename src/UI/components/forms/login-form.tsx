@@ -6,10 +6,10 @@ import { z } from 'zod';
 import { useLogin } from '@/components/hooks/use-auth';
 import { AnimatedButton } from '@/components/ui/button';
 import {
-  Card,
   CardContent,
   CardDescription,
   CardFooter,
+  CardForm,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -23,7 +23,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input, PasswordInput } from '@/components/ui/input';
-import {booleanSchema, emailSchema, stringSchema} from "@/types/zod-schemas.ts";
+import {
+  booleanSchema,
+  emailSchema,
+  stringSchema,
+} from '@/types/zod-schemas.ts';
 
 const formSchema = z.object({
   username: emailSchema(),
@@ -48,7 +52,7 @@ export default function LoginForm() {
   }
 
   return (
-    <Card className="w-[350px] md:w-[500px]">
+    <CardForm>
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl">Login</CardTitle>
         <CardDescription>
@@ -134,6 +138,6 @@ export default function LoginForm() {
           </CardFooter>
         </form>
       </Form>
-    </Card>
+    </CardForm>
   );
 }

@@ -14,10 +14,12 @@ import {
   PasswordResetRequestForm,
 } from '@/types/form-types';
 import { authMessages as messages } from '@/types/messages.ts';
+import {backendQueryClient} from "@/lib/backend-fetch.ts";
+import {useNavigate} from "react-router-dom";
 
 export function useProfileQuery() {
   return useMutation({
-    mutationKey: ['login'],
+    mutationKey: ['profile'],
     mutationFn: () => getProfile(),
     onSuccess: (data) => {
       toast.success(messages.loggedIn);
@@ -27,8 +29,8 @@ export function useProfileQuery() {
 }
 
 export function useLogin() {
+  const navigate = useNavigate();
   return useMutation({
-    mutationKey: ['login'],
     mutationFn: (data: LoginForm) => login(data),
     onError: (data) => {
       toast.error(messages.error, {
@@ -36,6 +38,8 @@ export function useLogin() {
       });
     },
     onSuccess: (data) => {
+      navigate('/');
+      backendQueryClient.removeQueries({ queryKey: ['profile']})
       toast.success(messages.loggedIn);
       console.log(data);
     },
@@ -44,7 +48,6 @@ export function useLogin() {
 
 export function useLogoutQuery() {
   return useMutation({
-    mutationKey: ['login'],
     mutationFn: () => logout(),
     onError: (data) => {
       toast.error(messages.error, {
@@ -52,6 +55,7 @@ export function useLogoutQuery() {
       });
     },
     onSuccess: (data) => {
+      backendQueryClient.removeQueries({ queryKey: ['profile']})
       toast.success(messages.loggedOut);
       console.log(data);
     },
@@ -59,6 +63,7 @@ export function useLogoutQuery() {
 }
 
 export function useRequestPasswordReset() {
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: (data: PasswordResetRequestForm) => requestPasswordReset(data),
     onError: (data) => {
@@ -67,6 +72,7 @@ export function useRequestPasswordReset() {
       });
     },
     onSuccess: (data) => {
+      navigate('/auth/reset-password-confirm');
       toast.success(messages.passwordResetRequest);
       console.log(data);
     },
@@ -74,6 +80,7 @@ export function useRequestPasswordReset() {
 }
 
 export function usePasswordReset({ token }: { token: string }) {
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: (data: PasswordResetForm) => passwordReset(token, data),
     onError: (data) => {
@@ -83,6 +90,7 @@ export function usePasswordReset({ token }: { token: string }) {
       });
     },
     onSuccess: (data) => {
+      navigate('/auth/reset-password-confirm');
       toast.success(messages.passwordReset);
       console.log(data);
     },

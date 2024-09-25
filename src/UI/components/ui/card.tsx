@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 const Card = React.forwardRef<
   HTMLDivElement,
@@ -16,6 +17,25 @@ const Card = React.forwardRef<
   />
 ));
 Card.displayName = 'Card';
+
+const CardForm = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, ...props }, ref) => (
+  <motion.div
+    animate={{ opacity: 1, y: 0 }}
+    initial={{ opacity: 0, y: -20 }}
+    exit={{ opacity: 0, y: 20 }}
+    transition={{ duration: 0.3 }}
+  >
+    <Card
+      ref={ref}
+      className={cn('w-[350px] md:w-[500px]', className)}
+      {...props}
+    />
+  </motion.div>
+));
+CardForm.displayName = 'CardForm';
 
 const CardHeader = React.forwardRef<
   HTMLDivElement,
@@ -78,6 +98,7 @@ CardFooter.displayName = 'CardFooter';
 
 export {
   Card,
+  CardForm,
   CardHeader,
   CardFooter,
   CardTitle,
