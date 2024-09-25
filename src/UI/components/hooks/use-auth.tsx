@@ -13,7 +13,7 @@ import {
   PasswordResetForm,
   PasswordResetRequestForm,
 } from '@/types/form-types';
-import { authMessages as messages } from '@/types/toast-messages';
+import { authMessages as messages } from '@/types/messages.ts';
 
 export function useProfileQuery() {
   return useMutation({
@@ -77,6 +77,7 @@ export function usePasswordReset({ token }: { token: string }) {
   return useMutation({
     mutationFn: (data: PasswordResetForm) => passwordReset(token, data),
     onError: (data) => {
+      console.log(data);
       toast.error(messages.error, {
         description: data.message,
       });

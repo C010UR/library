@@ -41,6 +41,8 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 RUN chown -R www-data:1000 /tmp
 RUN chmod -R 775 /tmp
 
+run composer install
+
 USER www-data
 
 ENTRYPOINT ["entrypoint.sh"]

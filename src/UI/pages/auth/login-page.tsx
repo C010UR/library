@@ -7,7 +7,7 @@ export async function loginLoader() {
   try {
     const user = await getProfile();
 
-    if (user !== undefined) {
+    if (user) {
       return redirect('/');
     }
 

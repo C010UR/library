@@ -23,13 +23,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input, PasswordInput } from '@/components/ui/input';
-
-
+import {booleanSchema, emailSchema, stringSchema} from "@/types/zod-schemas.ts";
 
 const formSchema = z.object({
-  username: z.string().email(),
-  password: z.string().min(3).max(255),
-  _remember_me: z.boolean(),
+  username: emailSchema(),
+  password: stringSchema(),
+  _remember_me: booleanSchema(),
 });
 
 export default function LoginForm() {
@@ -60,6 +59,7 @@ export default function LoginForm() {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent className="grid gap-4">
             <FormField
+              required
               control={form.control}
               name="username"
               render={({ field }) => (
@@ -67,7 +67,6 @@ export default function LoginForm() {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
-                      required
                       autoComplete="username"
                       disabled={mutation.isPending}
                       placeholder="user@example.com"
@@ -80,6 +79,7 @@ export default function LoginForm() {
               )}
             />
             <FormField
+              required
               control={form.control}
               name="password"
               render={({ field }) => (
@@ -87,7 +87,6 @@ export default function LoginForm() {
                   <FormLabel>Password</FormLabel>
                   <FormControl>
                     <PasswordInput
-                      required
                       autoComplete="current-password"
                       disabled={mutation.isPending}
                       {...field}

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { z } from 'zod';
 
 import { useRequestPasswordReset } from '@/components/hooks/use-auth';
-import {AnimatedButton} from '@/components/ui/button';
+import { AnimatedButton } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -23,10 +23,11 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { HOST_URL } from '@/lib/backend-fetch';
+import { emailSchema, stringSchema } from '@/types/zod-schemas.ts';
 
 const formSchema = z.object({
-  email: z.string().email(),
-  hook: z.string(),
+  email: emailSchema(),
+  hook: stringSchema(),
 });
 
 export default function ForgotPasswordForm() {
@@ -34,7 +35,7 @@ export default function ForgotPasswordForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: '',
-      hook: HOST_URL + '/reset-password',
+      hook: HOST_URL + 'auth/reset-password',
     },
   });
 
@@ -57,6 +58,7 @@ export default function ForgotPasswordForm() {
         <form onSubmit={form.handleSubmit(onSubmit)}>
           <CardContent className="grid gap-4">
             <FormField
+              required
               control={form.control}
               name="email"
               render={({ field }) => (

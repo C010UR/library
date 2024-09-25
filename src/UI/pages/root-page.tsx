@@ -1,14 +1,15 @@
 import { redirect, useLoaderData } from 'react-router-dom';
 
 import { getProfile } from '@/api/auth';
+import UserProvider from '@/components/providers/user/user-provider';
 import { User } from '@/types/types';
 
 export async function profileLoader() {
   try {
     const user = await getProfile();
 
-    if (user !== undefined) {
-      return redirect('/');
+    if (!user) {
+      return redirect('/auth/login');
     }
 
     return { user };
@@ -18,11 +19,13 @@ export async function profileLoader() {
 }
 
 export default function RootPage() {
-  const { user } = useLoaderData() as { user: undefined | User };
+  const { user } = useLoaderData() as { user: User };
 
-  if (user === undefined) {
-    redirect('/');
-  }
-
-  return <div>Hello</div>;
+  return (
+    <>
+      <UserProvider value={user}>
+        <div>{user.email}</div>
+      </UserProvider>
+    </>
+  );
 }

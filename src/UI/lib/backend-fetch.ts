@@ -90,7 +90,7 @@ export async function backendFetch<ReturnType, InputType>(
   }: FetchOption<InputType> = {},
 ): Promise<ReturnType> {
   try {
-    return axios({
+    const response = await axios({
       method: method,
       baseURL: API_URL + '/api/v' + API_VERSION,
       url: endpoint,
@@ -100,6 +100,8 @@ export async function backendFetch<ReturnType, InputType>(
       responseType: withFiles ? 'formdata' : 'json',
       timeout: 60000, // 1 minute
     });
+
+    return response.data;
   } catch (error: Error | unknown) {
     if (isAxiosError(error) && error.response) {
       throw new FetchError(
