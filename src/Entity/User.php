@@ -18,7 +18,8 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
-class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTransformableInterface, IdAccessInterface, \Stringable
+class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTransformableInterface, IdAccessInterface,
+                      \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -104,7 +105,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTr
     #[\Override]
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        return (string)$this->email;
     }
 
     /**
@@ -221,7 +222,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTr
         return $this;
     }
 
-    public function getImage(): ?string
+    public function getImage(): null
+    {
+        return null;
+    }
+
+    public function getImageLink(): ?string
     {
         return $this->image && $this->imageOriginalFilename
             ? (new S3Client($this->bucket))->getLink($this->image, $this->imageOriginalFilename, false)
@@ -237,8 +243,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTr
         } else {
             $s3 = new S3Client();
             $this->bucket = $s3->getBucket();
-            $this->image = $s3->uploadImage($image, 'user-image');
-            $this->imageOriginalFilename = $image->getClientOriginalName();
+            $imageData = $s3->uploadImage($image, 'user-avatar', maxSize: 255, isSquare: true);
+            $this->image = $imageData['link'];
+            $this->imageOriginalFilename = $imageData['filename'];
         }
 
         return $this;
@@ -251,8 +258,24 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTr
 
     public function setContactInformation(?array $contactInformation): static
     {
-        $this->contactInformation = $contactInformation;
+        if (is_null($contactInformation)) {
+            $this->contactInformation = $contactInformation;
 
+            return $this;
+        }
+
+        $result = [];
+
+        foreach ($contactInformation as $key => $entry) {
+            if (!is_array($entry) && !array_key_exists('key', $entry) && !array_key_exists('value', $entry)) {
+                $result[] = ['key' => $key, 'value' => (string)$entry];
+            } else {
+                $result[] = ['key' => $entry['key'], 'value' => $entry['value']];
+            }
+        }
+
+        usort($result, fn ($a, $b) => $a['key'] <=> $b['key']);
+        $this->contactInformation = $result;
         return $this;
     }
 
@@ -312,14 +335,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTr
 
     public function getFullName(): ?string
     {
-        if (!$this->getFirstName() || !$this->getLastName()) {
+        if (!$this->getFirstname() || !$this->getLastname()) {
             return null;
         }
 
-        $fullName = $this->getFirstName().' '.$this->getLastName();
+        $fullName = $this->getFirstname() . ' ' . $this->getLastname();
 
-        if ($this->getMiddleName()) {
-            $fullName .= ' '.$this->getMiddleName();
+        if ($this->getMiddlename()) {
+            $fullName .= ' ' . $this->getMiddlename();
         }
 
         return $fullName;
@@ -327,16 +350,16 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTr
 
     public function normalizeName(): static
     {
-        if ($this->getFirstName()) {
-            $this->setFirstName(Utils::ucwords(Utils::uclower($this->getFirstName())));
+        if ($this->getFirstname()) {
+            $this->setFirstname(Utils::ucwords(Utils::uclower($this->getFirstName())));
         }
 
-        if ($this->getLastName()) {
-            $this->setLastName(Utils::ucwords(Utils::uclower($this->getLastName())));
+        if ($this->getLastname()) {
+            $this->setLastname(Utils::ucwords(Utils::uclower($this->getLastName())));
         }
 
-        if ($this->getMiddleName()) {
-            $this->setMiddleName(Utils::ucwords(Utils::uclower($this->getMiddleName())));
+        if ($this->getMiddlename()) {
+            $this->setMiddlename(Utils::ucwords(Utils::uclower($this->getMiddleName())));
         }
 
         return $this;
@@ -344,7 +367,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTr
 
     public function computeSlug(SluggerInterface $slugger): static
     {
-        $this->slug = (string) $slugger->slug(sprintf('%s %s', $this->id, $this->getFullName()))->lower();
+        $this->slug = (string)$slugger->slug(
+            sprintf('%s %s', Utils::generateRandomString(5), $this->getFullName()),
+        )->lower();
 
         return $this;
     }
@@ -360,7 +385,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTr
             'middlename' => $this->getMiddlename(),
             'full_name' => $this->getFullName(),
             'contact_information' => $this->getContactInformation(),
-            'image' => $this->getImage(),
+            'image' => $this->getImageLink(),
             'slug' => $this->getSlug(),
             'is_active' => $this->isActive(),
             'login_attempts' => $this->getLoginAttempts(),
@@ -368,7 +393,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTr
         ];
 
         if ($deep && !empty($this->getPermissions())) {
-            $result['permissions'] = $this->getPermissions()->map(fn(Permission $permission) => $permission->toArray())->toArray();
+            $result['permissions'] = $this->getPermissions()
+                ->map(fn(Permission $permission) => $permission->toArray())
+                ->toArray();
         }
 
         return $result;

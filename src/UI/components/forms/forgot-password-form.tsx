@@ -30,8 +30,10 @@ const formSchema = z.object({
   hook: stringSchema(),
 });
 
+export type PasswordResetRequestForm = z.infer<typeof formSchema>;
+
 export default function ForgotPasswordForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<PasswordResetRequestForm>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: '',
@@ -41,7 +43,7 @@ export default function ForgotPasswordForm() {
 
   const mutation = useRequestPasswordReset();
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: PasswordResetRequestForm) {
     mutation.mutate(values);
   }
 

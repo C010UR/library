@@ -3,8 +3,10 @@ import { Link, useLoaderData } from 'react-router-dom';
 import { getPermissionByName } from '@/api/permission';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Permission, User } from '@/types/types';
+import { userHasAccess } from '@/api/auth.ts';
 
 export async function permissionLoader({ params }: { params: unknown }) {
+  await userHasAccess(['SHOW_PERMISSIONS']);
   const permission = await getPermissionByName(
     (params as { name: undefined | string }).name ?? '0',
   );

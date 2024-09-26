@@ -9,6 +9,7 @@ use Aws\S3\S3Client as BaseS3Client;
 use Imagine\Gd\Imagine;
 use Imagine\Image\Box;
 use Imagine\Image\ImageInterface;
+use Imagine\Image\Point;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class S3Client
@@ -16,6 +17,7 @@ class S3Client
     private const string EXPIRES_AFTER = '+7 days';
 
     private const int IMAGE_MAX_SIZE = 4096;
+    private const string IMAGE_FORMAT = 'webp';
 
     private readonly string $bucket;
 
@@ -111,7 +113,7 @@ class S3Client
         return sprintf(
             '%s%s-%s.%s',
             $prefix,
-            substr(bin2hex(random_bytes(10)), 0, 10),
+            Utils::generateRandomString(10),
             (new \DateTime())->format('Y-m-d-H-i-s'),
             pathinfo($filePath, PATHINFO_EXTENSION) ?? 'bin',
         );
@@ -160,45 +162,60 @@ class S3Client
         return $key;
     }
 
-    public function uploadImage(UploadedFile $file, string $prefix = ''): string
-    {
+    public function uploadImage(
+        UploadedFile $file,
+        string $prefix = '',
+        int $maxSize = self::IMAGE_MAX_SIZE,
+        bool $isSquare = false,
+    ): array {
         [$iwidth, $iheight] = getimagesize($file->getPathname());
 
         $ratio = $iwidth / $iheight;
 
-        $width = self::IMAGE_MAX_SIZE;
-        $height = self::IMAGE_MAX_SIZE;
-
-        if ($width / $height > $ratio) {
-            $width = $height * $ratio;
-        } else {
-            $height = $width / $ratio;
-        }
+        $width = $maxSize;
+        $height = $maxSize;
 
         $imagine = new Imagine();
 
         $photo = $imagine->open($file->getPathname());
-        $photo
-            ->resize(new Box($width, $height), ImageInterface::FILTER_LANCZOS)
-            ->save($file->getPathname());
 
-        return $this->upload($file, $prefix);
+        if ($isSquare) {
+            if ($iwidth > $iheight) {
+                $cropSize = $iheight;
+                $cropX = ($iwidth - $iheight) / 2;
+                $cropY = 0;
+            } else {
+                $cropSize = $iwidth;
+                $cropX = 0;
+                $cropY = ($iheight - $iwidth) / 2;
+            }
+            $photo = $photo->crop(new Point((int)$cropX, (int)$cropY), new Box($cropSize, $cropSize));
+            $width = $height = $cropSize;
+        } else {
+            if ($width / $height > $ratio) {
+                $width = $height * $ratio;
+            } else {
+                $height = $width / $ratio;
+            }
+        }
+
+        file_put_contents(
+            $file->getPathname(),
+            $photo
+                ->resize(new Box($width, $height), ImageInterface::FILTER_LANCZOS)
+                ->get(self::IMAGE_FORMAT),
+        );
+
+        return [
+            'link' => $this->upload($file, $prefix),
+            'filename' => Utils::generateRandomString(10) . '.' . self::IMAGE_FORMAT,
+        ];
     }
 
     public function getLink(string $filename, string $originalFilename, bool $isAttachment = true): string
     {
-        $filename = urlencode($filename);
         $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-
-        if ('' !== $originalFilename) {
-            $originalExtension = strtolower(pathinfo($originalFilename, PATHINFO_EXTENSION));
-
-            if ($extension !== $originalExtension) {
-                $originalFilename .= '.'.$extension;
-            }
-        } else {
-            $originalFilename = $filename;
-        }
+        $originalFilename = urlencode($originalFilename ?: $filename);
 
         $command = $this->client->getCommand('GetObject', [
             'Bucket' => $this->bucket,

@@ -68,16 +68,19 @@ class PermissionService
         );
     }
 
-    public function userHasAccess(User $user, array|string $permissions): bool
+    public function userHasAccess(User $user, array|string $permissions): array
     {
         $permissions = is_string($permissions) ? [$permissions] : $permissions;
 
         if ([] === $permissions) {
-            return true;
+            return [];
         }
 
         $targetPermissions = $this->permissionRepository->findByUserAndNames($user, $permissions);
 
-        return $permissions === array_map(fn (Permission $permission) => $permission->getName(), $targetPermissions);
+        return array_diff(
+            $permissions,
+            array_map(fn (Permission $permission) => $permission->getName(), $targetPermissions)
+        );
     }
 }

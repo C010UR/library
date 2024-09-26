@@ -6,7 +6,7 @@ import {User} from "@/types/types";
 export function useUser(): User {
   const user = React.useContext(UserContext);
 
-  if (user === undefined) {
+  if (user === null) {
     throw new Error(
       "Couldn't find a user. Is your component inside the UserProvider and the user is authenticated?",
     );

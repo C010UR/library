@@ -1,10 +1,8 @@
 import { backendFetch, backendQueryClient } from '@/lib/backend-fetch';
-import {
-  LoginForm,
-  PasswordResetForm,
-  PasswordResetRequestForm,
-} from '@/types/form-types';
-import { User } from '@/types/types';
+import { User, UserPermission } from '@/types/types';
+import { LoginForm } from '@/components/forms/login-form.tsx';
+import { PasswordResetRequestForm } from '@/components/forms/forgot-password-form.tsx';
+import { PasswordResetForm } from '@/components/forms/reset-password-form.tsx';
 
 export async function getProfile() {
   return backendQueryClient.fetchQuery({
@@ -71,5 +69,18 @@ export async function passwordReset(token: string, data: PasswordResetForm) {
           data,
         },
       ),
+  });
+}
+
+export async function userHasAccess(permissions: UserPermission[], slug: undefined|string = undefined) {
+  return backendQueryClient.fetchQuery({
+    queryKey: ['check-access', permissions],
+    queryFn: () =>
+      backendFetch<unknown, undefined>('/auth/check-access', {
+        params: {
+          permissions,
+          slug,
+        },
+      }),
   });
 }

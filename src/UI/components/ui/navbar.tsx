@@ -18,7 +18,7 @@ export default function Navbar({ navItems }: { navItems: NavbarLink[] }) {
   const user = useUser();
 
   return (
-    <nav className="absolute w-screen flex items-center justify-between p-4 bg-background/30 shadow-lg backdrop-blur transition-colors duration-200">
+    <nav className="absolute w-full flex items-center justify-between p-4 shadow-lg backdrop-blur transition-colors duration-200 border-b bg-muted">
       <div className="flex items-center space-x-4">
         <Link className="flex items-center space-x-2" to="/">
           <img src="/favicon.svg" alt="Logo" className="h-10" />

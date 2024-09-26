@@ -8,22 +8,19 @@ import {
   passwordReset,
   requestPasswordReset,
 } from '@/api/auth';
-import {
-  LoginForm,
-  PasswordResetForm,
-  PasswordResetRequestForm,
-} from '@/types/form-types';
 import { authMessages as messages } from '@/types/messages.ts';
-import {backendQueryClient} from "@/lib/backend-fetch.ts";
-import {useNavigate} from "react-router-dom";
+import { backendQueryClient } from '@/lib/backend-fetch.ts';
+import { useNavigate } from 'react-router-dom';
+import type { LoginForm } from '@/components/forms/login-form';
+import { PasswordResetRequestForm } from '@/components/forms/forgot-password-form';
+import { PasswordResetForm } from '@/components/forms/reset-password-form';
 
-export function useProfileQuery() {
+export function useProfileProfile() {
   return useMutation({
     mutationKey: ['profile'],
     mutationFn: () => getProfile(),
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success(messages.loggedIn);
-      console.log(data);
     },
   });
 }
@@ -37,11 +34,10 @@ export function useLogin() {
         description: data.message,
       });
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       navigate('/');
-      backendQueryClient.removeQueries({ queryKey: ['profile']})
+      backendQueryClient.removeQueries({ queryKey: ['profile'] });
       toast.success(messages.loggedIn);
-      console.log(data);
     },
   });
 }
@@ -55,11 +51,10 @@ export function useLogout() {
         description: data.message,
       });
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       navigate('/auth/login');
-      backendQueryClient.removeQueries({ queryKey: ['profile']})
+      backendQueryClient.removeQueries({ queryKey: ['profile'] });
       toast.success(messages.loggedOut);
-      console.log(data);
     },
   });
 }
@@ -73,10 +68,8 @@ export function useRequestPasswordReset() {
         description: data.message,
       });
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       navigate('/auth/reset-password-confirm');
-      toast.success(messages.passwordResetRequest);
-      console.log(data);
     },
   });
 }
@@ -86,15 +79,12 @@ export function usePasswordReset({ token }: { token: string }) {
   return useMutation({
     mutationFn: (data: PasswordResetForm) => passwordReset(token, data),
     onError: (data) => {
-      console.log(data);
       toast.error(messages.error, {
         description: data.message,
       });
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       navigate('/auth/reset-password-confirm');
-      toast.success(messages.passwordReset);
-      console.log(data);
     },
   });
 }

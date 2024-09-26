@@ -56,7 +56,7 @@ export default function Profile({ user, size }: ProfileProps) {
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent forceMount align="end" className="w-56">
+      <DropdownMenuContent forceMount align="end">
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-row space-x-2">
             <Avatar className="h-8 w-8">

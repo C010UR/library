@@ -35,8 +35,10 @@ const formSchema = z.object({
   _remember_me: booleanSchema(),
 });
 
+export type LoginForm = z.infer<typeof formSchema>;
+
 export default function LoginForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<LoginForm>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       username: '',
@@ -47,7 +49,7 @@ export default function LoginForm() {
 
   const mutation = useLogin();
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: LoginForm) {
     mutation.mutate(values);
   }
 

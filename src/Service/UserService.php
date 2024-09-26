@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Service\ResetPassword\ResetPasswordService;
 use App\Utils\Helper\ServiceHelper;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\String\Slugger\SluggerInterface;
 
@@ -18,6 +19,7 @@ class UserService
         private readonly UserRepository $userRepository,
         private readonly ResetPasswordService $resetPasswordService,
         private readonly SluggerInterface $slugger,
+        private readonly Security $security,
     ) {
     }
 
@@ -25,7 +27,9 @@ class UserService
     {
         $pre = function (User &$user): void {
             if ($this->userRepository->findOneByEmail($user->getEmail()) instanceof User) {
-                throw new BadRequestHttpException(sprintf('User with the email "%s" already exists', $user->getEmail()));
+                throw new BadRequestHttpException(
+                    sprintf('User with the email "%s" already exists', $user->getEmail()),
+                );
             }
 
             $user->normalizeName();
@@ -75,8 +79,42 @@ class UserService
         );
     }
 
+    public function disableUser(array|User $user, bool $isDisable): void
+    {
+        $pre = function (User &$user) use ($isDisable): void {
+            if (
+                !$user->isDisabled()
+                && $isDisable
+                && $this->security->getUser() instanceof User
+                && $this->security->getUser()->getId()
+            ) {
+                $this->security->logout(false);
+            }
+
+            $user->setDisabled($isDisable);
+        };
+
+        $process = function (array|User $user): array|User {
+            $this->userRepository->save($user, true);
+
+            return $user;
+        };
+
+        $this->processOneOrMany(
+            $user,
+            $process,
+            $pre,
+        );
+    }
+
     public function removeUser(array|User $user): void
     {
+        $pre = function (User &$user): void {
+            if ($this->security->getUser() instanceof User && $this->security->getUser()->getId()) {
+                $this->security->logout(false);
+            }
+        };
+
         $process = function (array|User $user): array|User {
             $this->userRepository->remove($user, true);
 
@@ -86,6 +124,7 @@ class UserService
         $this->processOneOrMany(
             $user,
             $process,
+            $pre,
         );
     }
 

@@ -34,8 +34,11 @@ const formSchema = z
     message: formErrorMessages.password.dontMatch,
     path: ['confirmPassword'],
   });
+
+export type PasswordResetForm = z.infer<typeof formSchema>;
+
 export default function ForgotPasswordForm({ token }: { token: string }) {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm<PasswordResetForm>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       password: '',
@@ -45,7 +48,7 @@ export default function ForgotPasswordForm({ token }: { token: string }) {
 
   const mutation = usePasswordReset({ token });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: PasswordResetForm) {
     mutation.mutate({ password: values.password });
   }
 

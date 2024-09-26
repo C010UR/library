@@ -21,7 +21,7 @@ interface ParamsOptions {
 export interface FetchOption<T> extends ParamsOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
   data?: T;
-  withFiles?: boolean;
+  contentType?: 'application/json' | 'multipart/form-data';
 }
 
 export class FetchError extends Error {
@@ -54,6 +54,10 @@ function parseParams({
     for (const paramKey in params) {
       const param = params[paramKey];
 
+      if (param === undefined) {
+        continue;
+      }
+
       if (Array.isArray(param)) {
         urlSearchParams.append(paramKey, param.map(mapParam).join(','));
       } else {
@@ -82,7 +86,7 @@ export async function backendFetch<ReturnType, InputType>(
   {
     method = 'GET',
     data = undefined,
-    withFiles = false,
+    contentType = 'application/json',
     params = undefined,
     pageSize = undefined,
     page = undefined,
@@ -90,6 +94,7 @@ export async function backendFetch<ReturnType, InputType>(
   }: FetchOption<InputType> = {},
 ): Promise<ReturnType> {
   try {
+
     const response = await axios({
       method: method,
       baseURL: API_URL + '/api/v' + API_VERSION,
@@ -97,7 +102,10 @@ export async function backendFetch<ReturnType, InputType>(
       withCredentials: true,
       params: parseParams({ params, pageSize, page, order }),
       data: method === 'GET' ? undefined : data,
-      responseType: withFiles ? 'formdata' : 'json',
+      headers: {
+        'Content-Type': contentType,
+      },
+      responseType: 'json',
       timeout: 60000, // 1 minute
     });
 

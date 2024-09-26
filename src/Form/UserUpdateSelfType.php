@@ -4,7 +4,6 @@ namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -12,7 +11,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class UserType extends AbstractType
+class UserUpdateSelfType extends AbstractType
 {
     #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -57,34 +56,14 @@ class UserType extends AbstractType
                 ],
             ])
             ->add('image', FileType::class, [
-                'required' => true,
+                'required' => false,
                 'constraints' => [
                     new Assert\Image(
                         maxSize: '8192k',
                         maxSizeMessage: 'The image is too large. The maximum size of the image is {{ limit }}',
                     ),
                 ],
-            ])
-            ->add('contact_information', CollectionType::class, [
-                'required' => false,
-                'allow_add' => true,
-                'allow_delete' => true,
-                'entry_type' => EntryType::class,
             ]);
-
-        if (!$options['is_edit']) {
-            $builder->add('email', EmailType::class, [
-                'required' => true,
-                'trim' => true,
-                'invalid_message' => 'Email is not valid',
-                'constraints' => [
-                    new Assert\NotBlank(message: 'Email cannot be empty'),
-                    new Assert\Email([
-                        'message' => 'Email is not valid',
-                    ]),
-                ],
-            ]);
-        }
     }
 
     #[\Override]
@@ -92,7 +71,6 @@ class UserType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => User::class,
-            'is_edit' => false,
             'csrf_protection' => false,
         ]);
     }

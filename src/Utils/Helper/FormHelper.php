@@ -17,13 +17,20 @@ class FormHelper
     ): FormInterface {
         $contentType = strtolower((string) $request->headers->get('content-type'));
 
-        $handles = self::getHandles();
+        $handle = null;
 
-        if (!array_key_exists($contentType, $handles)) {
+        foreach (self::getHandles() as $_contentType => $_handle) {
+            if (str_starts_with($contentType, $_contentType)) {
+                $handle = $_handle;
+                break;
+            }
+        }
+
+        if ($handle === null) {
             throw new BadRequestException(sprintf("Content-Type '%s' is not supported.", $request->headers->get('content-type')));
         }
 
-        $form->submit($handles[$contentType]($request), $clearMissing);
+        $form->submit($handle($request), $clearMissing);
 
         if (!$form->isValid()) {
             $errors = array_map(

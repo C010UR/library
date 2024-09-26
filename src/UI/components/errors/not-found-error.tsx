@@ -1,9 +1,9 @@
 import { FileQuestion } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/components/ui/button.tsx';
 
-export default function NotFoundErrorPage() {
+export default function NotFoundError() {
   return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground">
           <FileQuestion className="w-16 h-16 text-muted-foreground mb-4"/>
@@ -16,7 +16,7 @@ export default function NotFoundErrorPage() {
           </p>
           <div className="flex space-x-4">
               <Button asChild variant="outline">
-                  <Link to="">Go back home</Link>
+                  <Link to="/">Go back home</Link>
               </Button>
               <Button asChild>
                   <Link to="/contact">Contact support</Link>

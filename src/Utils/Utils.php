@@ -94,4 +94,9 @@ class Utils
             default => 'text/plain',
         };
     }
+
+    public static function generateRandomString(int $length): string
+    {
+        return substr(bin2hex(random_bytes($length * 2)), 0, $length);
+    }
 }

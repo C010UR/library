@@ -23,6 +23,10 @@ class PermissionVoter extends Voter
     #[\Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
+        if ($subject instanceof User) {
+            return true;
+        }
+
         $attributes = $this->parseAttribute($attribute);
         $permissions = PermissionEnum::keys();
 
@@ -44,6 +48,10 @@ class PermissionVoter extends Voter
             return false;
         }
 
-        return $this->permissionService->userHasAccess($user, $this->parseAttribute($attribute));
+        if ($subject instanceof User && $subject->getId() === $user->getId()) {
+            return true;
+        }
+
+        return count($this->permissionService->userHasAccess($user, $this->parseAttribute($attribute))) === 0;
     }
 }

@@ -6,10 +6,17 @@ export const authMessages = {
   passwordReset: 'Password was reset.',
 };
 
+export const userMessages = {
+  error: 'Uh oh! Something went wrong.',
+  updated: 'Successfully updated the user.',
+  deleted: 'Successfully deleted the user.',
+}
+
 export const formErrorMessages = {
   minLength: '{field} must be at least {minLength} characters long.',
   maxLength: '{field} can be at most {maxLength} characters long.',
   email: 'Email is not valid.',
+  maxFileSize: 'Max file size is {fileSize}',
   password: {
     uppercase: 'Password must include at least one uppercase letter.',
     lowercase: 'Password must include at least one lowercase letter.',

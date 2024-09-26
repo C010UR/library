@@ -34,14 +34,14 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}', name: 'show', methods: ['GET'])]
-    #[IsGranted('SHOW_USERS')]
+    #[IsGranted('SHOW_USERS', 'user')]
     public function show(User $user): JsonResponse
     {
         return new JsonResponse($user->toArray(true));
     }
 
     #[Route('/slug/{slug}', name: 'show_by_slug', methods: ['GET'])]
-    #[IsGranted('SHOW_USERS')]
+    #[IsGranted('SHOW_USERS', 'user')]
     public function showBySlug(#[MapEntity(mapping: ['slug' => 'slug'])] User $user): JsonResponse
     {
         return new JsonResponse($user->toArray(true));
@@ -62,10 +62,12 @@ class UserController extends AbstractController
     }
 
     #[Route('/{id}/update', name: 'update', methods: ['POST'])]
-    #[IsGranted('SHOW_USERS:UPDATE_USERS')]
+    #[IsGranted('SHOW_USERS:UPDATE_USERS', 'user')]
     public function update(Request $request, User $user): JsonResponse
     {
-        $form = $this->createForm(UserType::class, $user);
+        $form = $this->createForm(UserType::class, $user, [
+            'is_edit' => true,
+        ]);
         FormHelper::submit($request, $form, false);
 
         $this->userService->updateUser($user);
@@ -73,11 +75,29 @@ class UserController extends AbstractController
         return new JsonResponse($user->toArray(true));
     }
 
-    #[Route('/{id}/remove', name: 'remove', methods: ['POST'])]
-    #[IsGranted('SHOW_USERS:UPDATE_USERS')]
+    #[Route('/{id}/remove', name: 'remove', methods: ['DELETE'])]
+    #[IsGranted('SHOW_USERS:UPDATE_USERS', 'user')]
     public function remove(User $user): JsonResponse
     {
         $this->userService->removeUser($user);
+
+        return new JsonResponse();
+    }
+
+    #[Route('/{id}/deactivate', name: 'deactivate', methods: ['POST'])]
+    #[IsGranted('SHOW_USERS:UPDATE_USERS')]
+    public function deactivate(User $user): JsonResponse
+    {
+        $this->userService->disableUser($user, true);
+
+        return new JsonResponse();
+    }
+
+    #[Route('/{id}/activate', name: 'activate', methods: ['POST'])]
+    #[IsGranted('SHOW_USERS:UPDATE_USERS')]
+    public function activate(User $user): JsonResponse
+    {
+        $this->userService->disableUser($user, false);
 
         return new JsonResponse();
     }

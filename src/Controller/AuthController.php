@@ -15,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 #[Route('/api/v1/auth', name: 'auth_api_v1_', format: 'json')]
 class AuthController extends AbstractController
@@ -53,27 +54,42 @@ class AuthController extends AbstractController
         return new JsonResponse($user->toArray(true));
     }
 
-    #[Route('/has-access', name: 'has_access', methods: ['GET'])]
-    public function hasAccess(Request $request): JsonResponse
+    #[Route('/check-access', name: 'check_access', methods: ['GET'])]
+    public function checkAccess(Request $request): JsonResponse
     {
         if (!$this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return new JsonResponse(false);
+            throw new AccessDeniedException('User is not authenticated.');
         }
 
         /** @var User $user */
         $user = $this->getUser();
         $permissions = trim($request->query->get('permissions', ''));
 
-        if ('' === $permissions) {
-            return new JsonResponse(true);
+        if (
+            '' === $permissions
+            || trim($request->query->get('slug', '')) === $user->getSlug()
+            || (int)trim($request->query->get('id', '0')) === $user->getId()
+        ) {
+            return new JsonResponse();
         }
 
         $permissions = array_map(
-            fn (string $permission) => trim($permission),
+            fn(string $permission) => trim($permission),
             explode(',', $request->query->get('permissions', '')),
         );
 
-        return new JsonResponse($user && $this->permissionService->userHasAccess($user, $permissions));
+        $missingPermissions = $this->permissionService->userHasAccess($user, $permissions);
+
+        if (count($missingPermissions) > 0) {
+            throw new AccessDeniedException(
+                sprintf(
+                    'User is not authorized on next permission(s): %s',
+                    implode(', ', $missingPermissions),
+                ),
+            );
+        }
+
+        return new JsonResponse();
     }
 
     #[Route('/password/reset', name: 'request_reset_password', methods: ['POST'])]

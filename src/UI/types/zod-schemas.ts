@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { formErrorMessages } from '@/types/messages';
 
 export const passwordSchema = (min: number = 8, max: number = 255) =>
-  stringSchema(min, max)
+  stringSchema({ min, max, fieldName: 'Password' })
     .refine((password) => /[A-Z]/.test(password), {
       message: formErrorMessages.password.uppercase,
     })
@@ -17,25 +17,36 @@ export const passwordSchema = (min: number = 8, max: number = 255) =>
       message: formErrorMessages.password.special,
     });
 
-export const stringSchema = (min: number = 8, max: number = 255) =>
-  z
+export const stringSchema = ({
+  min = 8,
+  max = 255,
+  fieldName = 'Field',
+}: {
+  min?: number;
+  max?: number;
+  fieldName?: string;
+} = {}) =>
+z
     .string()
     .min(min, {
       message: formErrorMessages.minLength
         .replace('{minLength}', String(min))
-        .replace('{field}', 'Password'),
+        .replace('{field}', fieldName),
     })
     .max(max, {
       message: formErrorMessages.maxLength
         .replace('{maxLength}', String(max))
-        .replace('{field}', 'Password'),
+        .replace('{field}', fieldName),
     });
 
-export const emailSchema = () =>
-  z
-    .string()
-    .email(formErrorMessages.email);
+export const emailSchema = () => z.string().email(formErrorMessages.email);
 
-export const booleanSchema = () =>
-    z
-        .boolean();
+export const booleanSchema = () => z.boolean();
+
+export const fileSchema = () =>
+  z
+    .any()
+    .refine(
+      (file) => typeof file === 'string' || file.size <= 8 * 1024 * 1024,
+      formErrorMessages.maxFileSize.replace('{fileSize}', '8MB'),
+    );

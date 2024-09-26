@@ -12,6 +12,7 @@ import {
 
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
 
 const Form = FormProvider;
 
@@ -104,7 +105,12 @@ const FormLabel = React.forwardRef<
   return (
     <Label
       ref={ref}
-      className={cn(error && 'text-destructive', required && 'before:text-destructive before:content-["*"] before:mr-0.5', className)}
+      className={cn(
+        error && 'text-destructive',
+        required &&
+          'before:text-destructive before:content-["*"] before:mr-0.5',
+        className,
+      )}
       htmlFor={formItemId}
       {...props}
     />
@@ -164,14 +170,18 @@ const FormMessage = React.forwardRef<
   }
 
   return (
-    <p
-      ref={ref}
-      className={cn('text-sm font-medium text-destructive', className)}
-      id={formMessageId}
-      {...props}
-    >
-      {body}
-    </p>
+      // @ts-ignore
+      <motion.p
+          ref={ref}
+          className={cn('text-sm font-medium text-destructive', className)}
+          id={formMessageId}
+          {...props}
+          initial={{opacity: 0, y: -20}}
+          animate={{opacity: 1, y: 0}}
+          transition={{duration: 0.2}}
+      >
+        {body}
+      </motion.p>
   );
 });
 FormMessage.displayName = 'FormMessage';

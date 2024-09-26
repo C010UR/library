@@ -2,24 +2,13 @@
 
 namespace App\Service\ResetPassword\Class;
 
+use App\Utils\Utils;
+
 class ResetPasswordRandomGenerator implements ResetPasswordRandomGeneratorInterface
 {
     #[\Override]
     public function generate(int $length): string
     {
-        $result = '';
-
-        while (($len = strlen($result)) < 20) {
-            $size = 20 - $len;
-            $bytes = random_bytes($size);
-
-            $result .= substr(
-                str_replace(['/', '+', '='], '', base64_encode($bytes)),
-                0,
-                $size,
-            );
-        }
-
-        return $result;
+        return Utils::generateRandomString($length);
     }
 }

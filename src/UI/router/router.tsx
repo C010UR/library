@@ -10,6 +10,7 @@ import ForgotPasswordConfirmationPage from '@/pages/auth/forgot-password-confirm
 import ResetPasswordConfirmationPage from '@/pages/auth/reset-password-confirmation-page.tsx';
 import ShowUserPage, { userLoader } from '@/pages/show/show-user-page.tsx';
 import ShowPermissionPage, {permissionLoader} from "@/pages/show/show-permission-page.tsx";
+import UpdateUserPage, {updateUserLoader} from "@/pages/update/update-user-page.tsx";
 
 export default createBrowserRouter([
   {
@@ -22,6 +23,16 @@ export default createBrowserRouter([
         path: '/user/:slug',
         element: <ShowUserPage />,
         loader: userLoader,
+      },
+      {
+        path: '/user/:slug/update',
+        element: <UpdateUserPage />,
+        loader: updateUserLoader,
+      },
+      {
+        path: '/profile',
+        element: <ShowUserPage />,
+        loader: profileLoader,
       },
       {
         path: '/permission/:name',

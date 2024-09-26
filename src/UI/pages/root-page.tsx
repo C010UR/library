@@ -45,10 +45,10 @@ export default function RootPage() {
   return (
     <>
       <UserProvider value={user}>
-        <Navbar navItems={navItems} />
-        <FloatingNav navItems={navItems} />
-        <div className="bg-muted h-screen pt-20">
-          <Outlet />
+        <Navbar navItems={navItems}/>
+        <FloatingNav navItems={navItems}/>
+        <div className="h-screen pt-20">
+          <Outlet/>
         </div>
       </UserProvider>
     </>
