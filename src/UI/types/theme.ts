@@ -22,12 +22,12 @@ export class Theme {
     );
   }
 
-  public setTheme(theme: ThemeEnum | undefined) {
+  public setTheme(theme: 'light' | 'dark' | 'system') {
     switch (theme) {
-      case ThemeEnum.DARK:
+      case 'dark':
         this.enableDarkMode();
         break;
-      case ThemeEnum.LIGHT:
+      case 'light':
         this.disableDarkMode();
         break;
       default:

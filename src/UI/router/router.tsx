@@ -6,8 +6,10 @@ import LoginPage, { loginLoader } from '@/pages/auth/login-page';
 import ResetPasswordPage from '@/pages/auth/reset-password-page';
 import ErrorPage from '@/pages/error/error-page';
 import RootPage, { profileLoader } from '@/pages/root-page';
-import ForgotPasswordConfirmationPage from "@/pages/auth/forgot-password-confirmation-page.tsx";
-import ResetPasswordConfirmationPage from "@/pages/auth/reset-password-confirmation-page.tsx";
+import ForgotPasswordConfirmationPage from '@/pages/auth/forgot-password-confirmation-page.tsx';
+import ResetPasswordConfirmationPage from '@/pages/auth/reset-password-confirmation-page.tsx';
+import ShowUserPage, { userLoader } from '@/pages/show/show-user-page.tsx';
+import ShowPermissionPage, {permissionLoader} from "@/pages/show/show-permission-page.tsx";
 
 export default createBrowserRouter([
   {
@@ -15,6 +17,18 @@ export default createBrowserRouter([
     element: <RootPage />,
     errorElement: <ErrorPage />,
     loader: profileLoader,
+    children: [
+      {
+        path: '/user/:slug',
+        element: <ShowUserPage />,
+        loader: userLoader,
+      },
+      {
+        path: '/permission/:name',
+        element: <ShowPermissionPage />,
+        loader: permissionLoader,
+      },
+    ],
   },
   {
     path: '/auth',

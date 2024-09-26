@@ -29,7 +29,7 @@ class ResetPasswordHelper
         $this->collectGarbage();
 
         if (($availableAt = $this->hasUserHitThrottling($user)) instanceof \DateTimeInterface) {
-            throw new TooManyPasswordRequestsException($availableAt);
+            throw new TooManyPasswordRequestsException();
         }
 
         $resetRequestLifetime ??= $this->resetRequestLifetime;

@@ -2,7 +2,6 @@ import { AlertCircle } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import { Button } from '@/components/ui/button';
-import ThemeToggle from '@/components/ui/theme-toggle';
 
 export default function GenericError({
   errorMessage,
@@ -11,7 +10,6 @@ export default function GenericError({
 }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-background text-foreground">
-      <ThemeToggle />
       <AlertCircle className="w-16 h-16 text-destructive mb-4" />
       <h1 className="text-4xl font-bold mb-2">Oops! Something went wrong</h1>
       <p className="text-xl mb-4">We apologize for the inconvenience</p>

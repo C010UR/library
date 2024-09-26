@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Permission;
 use App\Repository\PermissionRepository;
+use Symfony\Bridge\Doctrine\Attribute\MapEntity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -33,6 +34,13 @@ class PermissionController extends AbstractController
     #[Route('/{id}', name: 'show', methods: ['GET'])]
     #[IsGranted('SHOW_PERMISSIONS')]
     public function show(Permission $permission): JsonResponse
+    {
+        return new JsonResponse($permission->toArray(true));
+    }
+
+    #[Route('/name/{name}', name: 'show_by_name', methods: ['GET'])]
+    #[IsGranted('SHOW_PERMISSIONS')]
+    public function showByName(#[MapEntity(mapping: ['name' => 'name'])] Permission $permission): JsonResponse
     {
         return new JsonResponse($permission->toArray(true));
     }

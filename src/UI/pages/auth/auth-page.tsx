@@ -4,9 +4,13 @@ import ThemeToggle from '@/components/ui/theme-toggle';
 
 export default function AuthPage() {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
-      <ThemeToggle />
-      <Outlet />
-    </div>
+    <>
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
+      <div className="flex items-center justify-center min-h-screen bg-muted dark:bg-background">
+        <Outlet />
+      </div>
+    </>
   );
 }

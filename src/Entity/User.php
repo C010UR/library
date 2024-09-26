@@ -358,6 +358,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTr
             'firstname' => $this->getFirstname(),
             'lastname' => $this->getLastname(),
             'middlename' => $this->getMiddlename(),
+            'full_name' => $this->getFullName(),
             'contact_information' => $this->getContactInformation(),
             'image' => $this->getImage(),
             'slug' => $this->getSlug(),
@@ -366,15 +367,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, ArrayTr
             'is_disabled' => $this->isDisabled(),
         ];
 
-        if ($deep) {
-            $result['permissions'] = [];
-
-            if (!empty($this->getPermissions())) {
-                /** @var Permission $permission */
-                foreach ($this->getPermissions() as $permission) {
-                    $result['permissions'][$permission->getId()] = $permission->toArray();
-                }
-            }
+        if ($deep && !empty($this->getPermissions())) {
+            $result['permissions'] = $this->getPermissions()->map(fn(Permission $permission) => $permission->toArray())->toArray();
         }
 
         return $result;

@@ -46,7 +46,8 @@ export function useLogin() {
   });
 }
 
-export function useLogoutQuery() {
+export function useLogout() {
+  const navigate = useNavigate();
   return useMutation({
     mutationFn: () => logout(),
     onError: (data) => {
@@ -55,6 +56,7 @@ export function useLogoutQuery() {
       });
     },
     onSuccess: (data) => {
+      navigate('/auth/login');
       backendQueryClient.removeQueries({ queryKey: ['profile']})
       toast.success(messages.loggedOut);
       console.log(data);

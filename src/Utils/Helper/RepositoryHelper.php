@@ -66,7 +66,7 @@ trait RepositoryHelper
 
         foreach ($data as $row) {
             assert(array_key_exists(IdAccessInterface::class, class_implements($row)));
-            $result['result'][$row->getId()] = is_null($map) ? $row : $map($row);
+            $result['result'][] = is_null($map) ? $row : $map($row);
         }
 
         return $result;

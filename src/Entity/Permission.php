@@ -87,14 +87,8 @@ class Permission implements ArrayTransformableInterface, IdAccessInterface
             'description' => $this->getDescription(),
         ];
 
-        if ($deep) {
-            $result['users'] = [];
-            if (!empty($this->getUsers())) {
-                /** @var User $user */
-                foreach ($this->getUsers() as $user) {
-                    $result['users'][$user->getId()] = $user->toArray();
-                }
-            }
+        if ($deep && !empty($this->getUsers())) {
+            $result['users'] = $this->getUsers()->map(fn(User $user) => $user->toArray())->toArray();
         }
 
         return $result;

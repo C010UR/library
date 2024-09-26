@@ -35,7 +35,7 @@ class InitCommand extends Command
         $permissions = [];
 
         foreach (PermissionEnum::all() as $name => $description) {
-            if ($this->permissionRepository->findOneByName($name) instanceof Permission) {
+            if ($this->permissionRepository->findOneByName($name) === null) {
                 $permission = new Permission();
 
                 $permission
