@@ -6,7 +6,7 @@ import UpdateUserForm from '@/components/forms/update-user-form.tsx';
 import { useUpdateUser } from '@/components/hooks/use-user.tsx';
 import { User } from '@/types/types';
 
-export async function updateUserLoader({ params }: { params: unknown }) {
+export async function userUpdateLoader({ params }: { params: unknown }) {
   const slug = (params as { slug: undefined | string }).slug ?? '0';
 
   await userHasAccess(['SHOW_USERS', 'UPDATE_USERS'], slug);
@@ -20,7 +20,7 @@ export default function UpdateUserPage() {
   const mutation = useUpdateUser(user);
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6 max-w-3xl">
       <UpdateUserForm user={user} onSubmit={(data) => mutation.mutate(data)} />
     </div>
   );

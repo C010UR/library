@@ -11,8 +11,18 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-        destructive:
-          'bg-destructive text-destructive-foreground hover:bg-destructive/90',
+        error: 'bg-error text-error-foreground hover:bg-error/90',
+        success: 'bg-success text-success-foreground hover:bg-success/90',
+        warning: 'bg-warning text-warning-foreground hover:bg-warning/90',
+        info: 'bg-info text-info-foreground hover:bg-info/90',
+        'error-muted':
+          'bg-errormuted border border-errormuted-border text-errormuted-foreground hover:bg-errormuted/90',
+        'success-muted':
+          'bg-successmuted border border-successmuted-border text-successmuted-foreground hover:bg-successmuted/90',
+        'warning-muted':
+          'bg-warningmuted border border-warningmuted-border text-warningmuted-foreground hover:bg-warningmuted/90',
+        'info-muted':
+          'bg-infomuted border border-infomuted-border text-infomuted-foreground hover:bg-infomuted/90',
         outline:
           'border border-input bg-background hover:bg-accent hover:text-accent-foreground',
         secondary:
@@ -59,10 +69,7 @@ Button.displayName = 'Button';
 const AnimatedButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     return (
-      <motion.div
-        className="w-full"
-        whileTap={{ scale: 0.95 }}
-      >
+      <motion.div className="w-full" whileTap={{ scale: 0.95 }}>
         <Button
           asChild={asChild}
           className={className}

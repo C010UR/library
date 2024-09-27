@@ -14,12 +14,16 @@ import ThemeToggle from '@/components/ui/theme-toggle';
 import { NavbarLink } from '@/types/types';
 import { Dot } from 'lucide-react';
 
-export default function Navbar({ navItems }: { navItems: NavbarLink[] }) {
+export interface NavbarProps {
+  navItems: NavbarLink[];
+}
+
+function Navbar({ navItems }: NavbarProps) {
   const user = useUser();
 
   return (
     <nav className="absolute w-full flex items-center justify-between p-4 shadow-lg backdrop-blur transition-colors duration-200 border-b bg-muted">
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-8">
         <Link className="flex items-center space-x-2" to="/">
           <img src="/favicon.svg" alt="Logo" className="h-10" />
         </Link>
@@ -27,14 +31,14 @@ export default function Navbar({ navItems }: { navItems: NavbarLink[] }) {
         <Breadcrumb separator={<Dot />}>
           <BreadcrumbList>
             {navItems.map((navItem: NavbarLink, idx: number) => (
-                <React.Fragment key={idx}>
-                  {!!idx && <BreadcrumbSeparator />}
-                  <BreadcrumbItem key={`link=${idx}`}>
-                    <BreadcrumbLink href={navItem.link}>
-                      {navItem.name}
-                    </BreadcrumbLink>
-                  </BreadcrumbItem>
-                </React.Fragment>
+              <React.Fragment key={idx}>
+                {!!idx && <BreadcrumbSeparator />}
+                <BreadcrumbItem key={`link=${idx}`}>
+                  <BreadcrumbLink to={navItem.link}>
+                    {navItem.name}
+                  </BreadcrumbLink>
+                </BreadcrumbItem>
+              </React.Fragment>
             ))}
           </BreadcrumbList>
         </Breadcrumb>
@@ -47,3 +51,5 @@ export default function Navbar({ navItems }: { navItems: NavbarLink[] }) {
     </nav>
   );
 }
+
+export { Navbar };

@@ -8,9 +8,10 @@ import ErrorPage from '@/pages/error/error-page';
 import RootPage, { profileLoader } from '@/pages/root-page';
 import ForgotPasswordConfirmationPage from '@/pages/auth/forgot-password-confirmation-page.tsx';
 import ResetPasswordConfirmationPage from '@/pages/auth/reset-password-confirmation-page.tsx';
-import ShowUserPage, { userLoader } from '@/pages/show/show-user-page.tsx';
+import ShowUserPage, { userShowLoader } from '@/pages/show/show-user-page.tsx';
 import ShowPermissionPage, {permissionLoader} from "@/pages/show/show-permission-page.tsx";
-import UpdateUserPage, {updateUserLoader} from "@/pages/update/update-user-page.tsx";
+import UpdateUserPage, {userUpdateLoader} from "@/pages/update/update-user-page.tsx";
+import ListUsersPage, {userListLoader} from "@/pages/list/list-users-page.tsx";
 
 export default createBrowserRouter([
   {
@@ -20,14 +21,19 @@ export default createBrowserRouter([
     loader: profileLoader,
     children: [
       {
+        path: '/user/list',
+        element: <ListUsersPage />,
+        loader: userListLoader,
+      },
+      {
         path: '/user/:slug',
         element: <ShowUserPage />,
-        loader: userLoader,
+        loader: userShowLoader,
       },
       {
         path: '/user/:slug/update',
         element: <UpdateUserPage />,
-        loader: updateUserLoader,
+        loader: userUpdateLoader,
       },
       {
         path: '/profile',

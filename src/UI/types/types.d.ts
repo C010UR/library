@@ -10,6 +10,8 @@ export type UserPermission =
   | 'UPDATE_PERMISSIONS'
   | 'MANAGE_PERMISSIONS';
 
+export type Order = 'ASC' | 'DESC';
+
 interface NavbarLink {
   name: string;
   link: string;
@@ -45,6 +47,8 @@ export interface PaginatedResult<Type> {
     page_size: number,
     page: number,
     count: number,
+    orders: {[key: string]: Order},
+    filters: {[key: string]: string|string[]},
   }
   result: Type[]
 }

@@ -97,52 +97,76 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
             ->leftJoin('user.permissions', 'permissions')
             ->addSelect('permissions');
 
-        $filters = [
-            'full_name' => function (QueryBuilder $query, string $alias, mixed $value): QueryBuilder {
-                if (empty($value)) {
-                    return $query;
+        $filterHandles = [
+            'full_name' => function (QueryBuilder &$query, string $alias, mixed $value): void {
+                if (!empty($value)) {
+                    $query
+                        ->andWhere('FULL_TEXT_SEARCH(user.email, user.firstname, user.lastname, :search) = true')
+                        ->setParameter(':search', DoctrineHelper::transformToTsQuery($value));
                 }
-
-                return $query
-                    ->andWhere('FULL_TEXT_SEARCH(user.email, user.firstname, user.lastname, :search) = true')
-                    ->setParameter(':search', DoctrineHelper::transformToTsQuery($value));
             },
-            'email' => function (QueryBuilder $query, string $alias, mixed $value): QueryBuilder {
-                if (empty($value)) {
-                    return $query;
+            'email' => function (QueryBuilder &$query, string $alias, mixed $value): void {
+                if (!empty($value)) {
+                    $query
+                        ->andWhere('LOWER(user.email) LIKE :email')
+                        ->setParameter('email', DoctrineHelper::transformToLikeExpression((string)$value));
                 }
-
-                return $query
-                    ->andWhere('LOWER(user.email) LIKE :email')
-                    ->setParameter('email', DoctrineHelper::transformToLikeExpression((string) $value));
             },
-            'is_active' => function (QueryBuilder $query, string $alias, mixed $value): QueryBuilder {
-                return $query
+            'is_active' => function (QueryBuilder &$query, string $alias, mixed $value): void {
+                $query
                     ->andWhere('LOWER(user.is_active) = :is_active')
-                    ->setParameter('is_active', (bool) $value);
+                    ->setParameter('is_active', (bool)$value);
             },
-            'is_dropped' => function (QueryBuilder $query, string $alias, mixed $value): QueryBuilder {
-                return $query
+            'is_dropped' => function (QueryBuilder &$query, string $alias, mixed $value): void {
+                $query
                     ->andWhere('LOWER(user.is_dropped) = :is_dropped')
-                    ->setParameter('is_dropped', (bool) $value);
+                    ->setParameter('is_dropped', (bool)$value);
             },
-            'search' => function (QueryBuilder $query, string $alias, mixed $value): QueryBuilder {
-                if (empty($value)) {
-                    return $query;
+            'search' => function (QueryBuilder &$query, string $alias, mixed $value): void {
+                if (!empty($value)) {
+                    $query
+                        ->andWhere(
+                            'FULL_TEXT_SEARCH(user.email, user.firstname, user.lastname, user.middlename, :search) = true',
+                        )
+                        ->setParameter(':search', DoctrineHelper::transformToTsQuery($value));
                 }
-
-                return $query
-                    ->andWhere('FULL_TEXT_SEARCH(user.email, user.firstname, user.lastname, user.middlename, :search) = true')
-                    ->setParameter(':search', DoctrineHelper::transformToTsQuery($value));
             },
         ];
+
+        $orderHandles = [
+            'id' => function (QueryBuilder &$query, string $alias, string $order): void {
+                $query
+                    ->addOrderBy('user.id', $order);
+            },
+            'full_name' => function (QueryBuilder &$query, string $alias, string $order): void {
+                $query
+                    ->addOrderBy('user.firstname', $order)
+                    ->addOrderBy('user.lastname', $order)
+                    ->addOrderBy('user.middlename', $order);
+            },
+            'email' => function (QueryBuilder &$query, string $alias, string $order): void {
+                $query
+                    ->addOrderBy('user.email', $order);
+            },
+            'is_active' => function (QueryBuilder &$query, string $alias, string $order): void {
+                $query
+                    ->addOrderBy('user.is_active', $order);
+            },
+            'is_disabled' => function (QueryBuilder &$query, string $alias, string $order): void {
+                $query
+                    ->addOrderBy('user.is_disabled', $order);
+            },
+        ];
+
+        $mapHandle = fn(User $user) => $user->toArray(true);
 
         return $this->filterByParams(
             $query,
             'user',
             $params,
-            $filters,
-            fn (User $user) => $user->toArray(true),
+            $filterHandles,
+            $orderHandles,
+            $mapHandle,
             $paginate,
         );
     }

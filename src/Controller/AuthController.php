@@ -63,10 +63,15 @@ class AuthController extends AbstractController
 
         /** @var User $user */
         $user = $this->getUser();
-        $permissions = trim($request->query->get('permissions', ''));
+
+        $permissions = $request->query->all()['permissions'] ?? [];
+
+        if (!is_array($permissions)) {
+            $permissions = [$permissions];
+        }
 
         if (
-            '' === $permissions
+            count($permissions) === 0
             || trim($request->query->get('slug', '')) === $user->getSlug()
             || (int)trim($request->query->get('id', '0')) === $user->getId()
         ) {
@@ -75,7 +80,7 @@ class AuthController extends AbstractController
 
         $permissions = array_map(
             fn(string $permission) => trim($permission),
-            explode(',', $request->query->get('permissions', '')),
+            $permissions,
         );
 
         $missingPermissions = $this->permissionService->userHasAccess($user, $permissions);

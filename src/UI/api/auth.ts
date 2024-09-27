@@ -77,7 +77,7 @@ export async function userHasAccess(permissions: UserPermission[], slug: undefin
     queryKey: ['check-access', permissions],
     queryFn: () =>
       backendFetch<unknown, undefined>('/auth/check-access', {
-        params: {
+        filters: {
           permissions,
           slug,
         },

@@ -79,41 +79,43 @@ class PermissionRepository extends ServiceEntityRepository
             ->leftJoin('permission.users', 'users')
             ->addSelect('users');
 
-        $filters = [
-            'name' => function (QueryBuilder $query, string $alias, mixed $value): QueryBuilder {
-                if (empty($value)) {
-                    return $query;
-                }
-
-                return $query
+        $filterHandles = [
+            'name' => function (QueryBuilder &$query, string $alias, mixed $value) {
+                if (!empty($value)) {
+                    $query
                     ->andWhere('permission.name LIKE :name')
                     ->setParameter('name', DoctrineHelper::transformToLikeExpression((string) $value));
-            },
-            'description' => function (QueryBuilder $query, string $alias, mixed $value): QueryBuilder {
-                if (empty($value)) {
-                    return $query;
                 }
-
-                return $query
+            },
+            'description' => function (QueryBuilder &$query, string $alias, mixed $value) {
+                if (!empty($value)) {
+                    $query
                     ->andWhere('FULL_TEXT_SEARCH(permission.description, :search) = true')
                     ->setParameter(':search', DoctrineHelper::transformToTsQuery($value));
-            },
-            'search' => function (QueryBuilder $query, string $alias, mixed $value): QueryBuilder {
-                if (empty($value)) {
-                    return $query;
                 }
-
-                return $query
+            },
+            'search' => function (QueryBuilder &$query, string $alias, mixed $value) {
+                if (!empty($value)) {
+                    $query
                     ->andWhere('FULL_TEXT_SEARCH(permission.name, permission.description, :search) = true')
                     ->setParameter(':search', DoctrineHelper::transformToTsQuery($value));
+                }
             },
+        ];
+
+        $orderHandles = [
+            'name' => function (QueryBuilder &$query, string $alias, string $order): void {
+                $query
+                    ->orderBy('permission.name', $order);
+            }
         ];
 
         return $this->filterByParams(
             $query,
             'permission',
             $params,
-            $filters,
+            $filterHandles,
+            $orderHandles,
             fn (Permission $permission) => $permission->toArray(true),
             $paginate,
         );

@@ -7,60 +7,96 @@
         --card-form-page: 350x;
         --card-form-page-md: 500x;
 
-        --background: 0 0% 100%;
-        --foreground: 240 10% 3.9%;
-        --card: 0 0% 100%;
-        --card-foreground: 240 10% 3.9%;
-        --popover: 0 0% 100%;
-        --popover-foreground: 240 10% 3.9%;
-        --primary: 240 5.9% 10%;
-        --primary-foreground: 0 0% 98%;
-        --secondary: 240 4.8% 95.9%;
-        --secondary-foreground: 240 5.9% 10%;
-        --muted: 240 4.8% 95.9%;
-        --muted-foreground: 240 3.8% 46.1%;
-        --accent: 240 4.8% 95.9%;
-        --accent-foreground: 240 5.9% 10%;
-        --destructive: 0 72.22% 50.59%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 240 5.9% 95.9%;
-        --input: 240 5.9% 90%;
-        --ring: 240 5% 64.9%;
-        --radius: 0.5rem;
+        --background: #fafafa;
+        --foreground: #09090b;
+        --card: #fafafa;
+        --card-foreground: #09090b;
+        --popover: #fafafa;
+        --popover-foreground: #09090b;
 
-        --chart-1: 12 76% 61%;
-        --chart-2: 173 58% 39%;
-        --chart-3: 197 37% 24%;
-        --chart-4: 43 74% 66%;
-        --chart-5: 27 87% 67%;
+        --primary: #18181b;
+        --primary-foreground: #fafafa;
+        --secondary: #f4f4f5;
+        --secondary-foreground: #18181b;
+        --muted: #f4f4f5;
+        --muted-foreground: #71717a;
+        --accent: #f4f4f5;
+        --accent-foreground: #18181b;
+
+        --success: #D3FDE5FF;
+        --success-foreground: #09090b;
+        --success-muted: #ECFDF3FF;
+        --success-muted-border: #D3FDE5FF;
+        --success-muted-foreground: #008A2EFF;
+
+        --warning: #FDF5D3FF;
+        --warning-foreground: #09090b;
+        --warning-muted: #FFFCF0FF;
+        --warning-muted-border: #FDF5D3FF;
+        --warning-muted-foreground: #DC7609FF;
+
+        --error: #FFE0E1FF;
+        --error-foreground: #09090b;
+        --error-muted: #FFF0F0FF;
+        --error-muted-border: #FFE0E1FF;
+        --error-muted-foreground: #E60000FF;
+
+        --info: #D3E0FDFF;
+        --info-foreground: #09090b;
+        --info-muted: #F0F8FFFF;
+        --info-muted-border: #D3E0FDFF;
+        --info-muted-foreground: #0973DCFF;
+
+        --border: #09090b;
+        --input: #18181b;
+        --ring: #18181b;
+        --radius: 0.5rem;
     }
 
     .dark {
-        --background: 240 3.7% 15.9%;
-        --foreground: 0 0% 98%;
-        --card: 240, 3%, 12%;
-        --card-foreground: 0 0% 98%;
-        --popover: 240, 3%, 12%;
-        --popover-foreground: 0 0% 98%;
-        --primary: 0 0% 98%;
-        --primary-foreground: 240 3.7% 15.9%;
-        --secondary: 240 3.7% 15.9%;
-        --secondary-foreground: 0 0% 98%;
-        --muted: 240, 3%, 12%;
-        --muted-foreground: 240 5% 64.9%;
-        --accent: 240 3.7% 15.9%;
-        --accent-foreground: 0 0% 98%;
-        --destructive: 0 72.22% 50.59%;
-        --destructive-foreground: 0 0% 98%;
-        --border: 240 3.7% 30.9%;
-        --input: 240 3.7% 30.9%;
-        --ring: 240 4.9% 83.9%;
+        --background: #18181b;
+        --foreground: #fafafa;
+        --card: #18181b;
+        --card-foreground: #fafafa;
+        --popover: #18181b;
+        --popover-foreground: #fafafa;
 
-        --chart-1: 220 70% 50%;
-        --chart-2: 160 60% 45%;
-        --chart-3: 30 80% 55%;
-        --chart-4: 280 65% 60%;
-        --chart-5: 340 75% 55%;
+        --primary: #fafafa;
+        --primary-foreground: #09090b;
+        --secondary: #fafafa;
+        --secondary-foreground: #09090b;
+        --muted: #27272a;
+        --muted-foreground: #a1a1aa;
+        --accent: #fafafa;
+        --accent-foreground: #212123;
+
+        --success: #59F3A6FF;
+        --success-foreground: #09090b;
+        --success-muted: #001F0FFF;
+        --success-muted-border: #003D1CFF;
+        --success-muted-foreground: #59F3A6FF;
+
+        --warning: #F3CF58FF;
+        --warning-foreground: #09090b;
+        --warning-muted: #1D1F00FF;
+        --warning-muted-border: #3D3D00FF;
+        --warning-muted-foreground: #F3CF58FF;
+
+        --error: #FF9EA1FF;
+        --error-foreground: #09090b;
+        --error-muted: #2D0607FF;
+        --error-muted-border: #4D0408FF;
+        --error-muted-foreground: #FF9EA1FF;
+
+        --info: #5896F3FF;
+        --info-foreground: #09090b;
+        --info-muted: #000D1FFF;
+        --info-muted-border: #00113DFF;
+        --info-muted-foreground: #5896F3FF;
+
+        --border: #fafafa;
+        --input: #f4f4f5;
+        --ring: #f4f4f5;
     }
 }
 

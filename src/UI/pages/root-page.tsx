@@ -1,11 +1,11 @@
-import {Outlet, redirect, useLoaderData} from 'react-router-dom';
+import { Outlet, redirect, useLoaderData } from 'react-router-dom';
 
 import { getProfile } from '@/api/auth';
 import UserProvider from '@/components/providers/user/user-provider';
 import { NavbarLink, User } from '@/types/types';
 import { FloatingNav } from '@/components/ui/floating-navbar.tsx';
-import { House, Send, User as UserIcon } from 'lucide-react';
-import Navbar from '@/components/ui/navbar.tsx';
+import { House, Send, UsersIcon } from 'lucide-react';
+import { Navbar } from '@/components/ui/navbar';
 
 export async function profileLoader() {
   try {
@@ -31,9 +31,9 @@ export default function RootPage() {
       icon: <House className="h-4 w-4 text-neutral-500 dark:text-white" />,
     },
     {
-      name: 'About',
-      link: '/about',
-      icon: <UserIcon className="h-4 w-4 text-neutral-500 dark:text-white" />,
+      name: 'Users',
+      link: '/user/list',
+      icon: <UsersIcon className="h-4 w-4 text-neutral-500 dark:text-white" />,
     },
     {
       name: 'Contact',
@@ -45,10 +45,10 @@ export default function RootPage() {
   return (
     <>
       <UserProvider value={user}>
-        <Navbar navItems={navItems}/>
-        <FloatingNav navItems={navItems}/>
+        <Navbar navItems={navItems} />
+        <FloatingNav navItems={navItems} />
         <div className="h-screen pt-20">
-          <Outlet/>
+          <Outlet />
         </div>
       </UserProvider>
     </>

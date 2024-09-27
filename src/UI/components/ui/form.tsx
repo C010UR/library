@@ -106,9 +106,9 @@ const FormLabel = React.forwardRef<
     <Label
       ref={ref}
       className={cn(
-        error && 'text-destructive',
+        error && 'text-error',
         required &&
-          'before:text-destructive before:content-["*"] before:mr-0.5',
+          'before:text-error before:content-["*"] before:mr-0.5',
         className,
       )}
       htmlFor={formItemId}
@@ -173,7 +173,7 @@ const FormMessage = React.forwardRef<
       // @ts-ignore
       <motion.p
           ref={ref}
-          className={cn('text-sm font-medium text-destructive', className)}
+          className={cn('text-sm font-medium text-error', className)}
           id={formMessageId}
           {...props}
           initial={{opacity: 0, y: -20}}

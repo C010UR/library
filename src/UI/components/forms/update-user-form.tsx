@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import {ArrowLeft, X} from 'lucide-react';
+import { ArrowLeft, X } from 'lucide-react';
 import { useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import * as z from 'zod';
@@ -24,8 +24,9 @@ import {
 import { Input } from '@/components/ui/input';
 import { User } from '@/types/types';
 import { fileSchema, stringSchema } from '@/types/zod-schemas.ts';
-import {useNavigate} from "react-router-dom";
-import {useUpdateUser} from "@/components/hooks/use-user.tsx";
+import { useNavigate } from 'react-router-dom';
+import { useUpdateUser } from '@/components/hooks/use-user.tsx';
+import {cn} from "@/lib/utils.ts";
 
 const formSchema = z.object({
   image: fileSchema().optional(),
@@ -96,7 +97,7 @@ export default function UpdateUserForm({
         </div>
         <div>
           <Button size="sm" onClick={() => navigate(-1)}>
-            <ArrowLeft className="pr-1"/> Go Back
+            <ArrowLeft className="pr-1" /> Go Back
           </Button>
         </div>
       </CardHeader>
@@ -188,7 +189,7 @@ export default function UpdateUserForm({
                 Contact Information
               </FormLabel>
               <Card className="bg-transparent">
-                <CardContent className="pt-6 space-y-4">
+                <CardContent className={cn(fields.length > 0 && 'pt-6', "space-y-4")}>
                   {fields.map((field, index: number) => (
                     <div key={field.id} className="flex space-x-2 items-start">
                       <FormField
@@ -197,7 +198,7 @@ export default function UpdateUserForm({
                         render={({ field }) => (
                           <FormItem className="flex-1">
                             <FormControl>
-                              <Input placeholder="Contact Type" {...field} />
+                              <Input placeholder="Name" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -209,7 +210,7 @@ export default function UpdateUserForm({
                         render={({ field }) => (
                           <FormItem className="flex-1">
                             <FormControl>
-                              <Input placeholder="Contact Value" {...field} />
+                              <Input placeholder="Value" {...field} />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -218,7 +219,7 @@ export default function UpdateUserForm({
                       <Button
                         size="icon"
                         type="button"
-                        variant="destructive"
+                        variant="error"
                         onClick={() => remove(index)}
                       >
                         <X className="h-4 w-4" />

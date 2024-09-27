@@ -1,11 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
-import {deleteUser, updateUser} from '@/api/user';
+import { deleteUser, updateUser } from '@/api/user';
 import { UpdateUserForm } from '@/components/forms/update-user-form';
 import { userMessages as messages } from '@/types/messages';
 import { User } from '@/types/types';
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
 
 export function useUpdateUser(user: User) {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ export function useUpdateUser(user: User) {
       });
     },
     onSuccess: (data) => {
-      navigate('/user/' + data.slug)
+      navigate('/user/' + data.slug);
       toast.success(messages.updated);
     },
   });
@@ -35,7 +35,7 @@ export function useDeleteUser(user: User) {
       });
     },
     onSuccess: () => {
-      navigate('/')
+      navigate('/');
       toast.success(messages.updated);
     },
   });
